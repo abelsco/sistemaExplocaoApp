@@ -14,7 +14,7 @@ import { UserOptions } from '../../interfaces/user-options';
   styleUrls: ['./signup.scss'],
 })
 export class SignupPage {
-  signup: UserOptions = { username: '', password: '' };
+  signup: UserOptions = { username: '', password: '', endSilo: '', tipoGrao: '' };
   submitted = false;
 
   constructor(
@@ -26,7 +26,8 @@ export class SignupPage {
     this.submitted = true;
 
     if (form.valid) {
-      this.userData.signup(this.signup.username);
+      this.userData.signup(this.signup.username, this.signup.tipoGrao);
+      // Aqui a definição dos parámetros
       this.router.navigateByUrl('/app/tabs/schedule');
     }
   }

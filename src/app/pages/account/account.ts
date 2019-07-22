@@ -13,6 +13,7 @@ import { UserData } from '../../providers/user-data';
 })
 export class AccountPage implements AfterViewInit {
   username: string;
+  tipoGrao: string;
 
   constructor(
     public alertCtrl: AlertController,
@@ -22,6 +23,7 @@ export class AccountPage implements AfterViewInit {
 
   ngAfterViewInit() {
     this.getUsername();
+    this.getTipoGrao();
   }
 
   updatePicture() {
@@ -59,6 +61,12 @@ export class AccountPage implements AfterViewInit {
   getUsername() {
     this.userData.getUsername().then((username) => {
       this.username = username;
+    });
+  }
+
+  getTipoGrao() {
+    this.userData.getTipoGrao().then((tipoGrao) => {
+      this.tipoGrao = tipoGrao;
     });
   }
 

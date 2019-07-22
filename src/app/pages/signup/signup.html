@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Signup</ion-title>
+    <ion-title>Criar</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,30 +16,68 @@
   <form #signupForm="ngForm" novalidate>
     <ion-list lines="none">
       <ion-item>
-        <ion-label position="stacked" color="primary">Username</ion-label>
+        <ion-label position="stacked" color="primary">Nome do Silo</ion-label>
         <ion-input [(ngModel)]="signup.username" name="username" type="text" #username="ngModel" required>
         </ion-input>
       </ion-item>
       <ion-text color="danger">
         <p [hidden]="username.valid || submitted == false" class="ion-padding-start">
-          Username is required
+          Nome do Silo é obrigatório
         </p>
       </ion-text>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Password</ion-label>
+        <ion-label position="stacked" color="primary">Endereço do Silo</ion-label>
+        <ion-input [(ngModel)]="signup.endSilo" name="endSilo" type="text" #endSilo="ngModel" required>
+        </ion-input>
+      </ion-item>
+      <ion-text color="danger">
+        <p [hidden]="endSilo.valid || submitted == false" class="ion-padding-start">
+          Endereço do Silo é obrigatório
+        </p>
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="stacked" color="primary">Tipo de material</ion-label>
+        <ion-select [(ngModel)]="signup.tipoGrao" name="tipoGrao" #tipoGrao="ngModel" required>
+          <ion-select-option value="Açúcar em pó" selected>Açúcar em pó</ion-select-option>
+          <ion-select-option value="Alho desidratado">Alho desidratado</ion-select-option>
+          <ion-select-option value="Arroz">Arroz</ion-select-option>
+          <ion-select-option value="Semente de arroz(casca)">Semente de arroz(casca)</ion-select-option>
+          <ion-select-option value="Casca de arroz">Casca de arroz</ion-select-option>
+          <ion-select-option value="Proteína de soja">Proteína de soja</ion-select-option>
+          <ion-select-option value="Farinha de soja">Farinha de soja</ion-select-option>
+          <ion-select-option value="Trigo bruto">Trigo bruto</ion-select-option>
+          <ion-select-option value="Farinha de trigo">Farinha de trigo</ion-select-option>
+          <ion-select-option value="Trigo Cereal">Trigo Cereal</ion-select-option>
+          <ion-select-option value="Palha de trigo">Palha de trigo</ion-select-option>
+          <ion-select-option value="Polvilho de trigo">Polvilho de trigo</ion-select-option>
+          <ion-select-option value="Milho">Milho</ion-select-option>
+          <ion-select-option value="Casca de milho cru">Casca de milho cru</ion-select-option>
+          <ion-select-option value="Polvilho de milho">Polvilho de milho</ion-select-option>
+          <ion-select-option value="Semente de milho">Semente de milho</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-text color="danger">
+        <p [hidden]="tipoGrao.valid || submitted == false" class="ion-padding-start">
+          Grão do Silo é obrigatório
+        </p>
+      </ion-text>
+
+      <ion-item>
+        <ion-label position="stacked" color="primary">Senha</ion-label>
         <ion-input [(ngModel)]="signup.password" name="password" type="password" #password="ngModel" required>
         </ion-input>
       </ion-item>
       <ion-text color="danger">
         <p [hidden]="password.valid || submitted == false" class="ion-padding-start">
-          Password is required
+          Senha é obrigatória
         </p>
       </ion-text>
     </ion-list>
 
     <div class="ion-padding">
-      <ion-button (click)="onSignup(signupForm)" type="submit" expand="block">Create</ion-button>
+      <ion-button (click)="onSignup(signupForm)" type="submit" expand="block">Confirmar</ion-button>
     </div>
   </form>
 
