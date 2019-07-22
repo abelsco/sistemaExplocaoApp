@@ -38,9 +38,10 @@ export class UserData {
     });
   }
 
-  signup(username: string): Promise<any> {
+  signup(username: string, tipoGrao: string): Promise<any> {
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
       this.setUsername(username);
+      this.setTipoGrao(tipoGrao);
       return this.events.publish('user:signup');
     });
   }
@@ -57,8 +58,28 @@ export class UserData {
     return this.storage.set('username', username);
   }
 
+  setTipoGrao(tipoGrao: string): Promise<any> {
+    return this.storage.set('tipoGrao', tipoGrao);
+  }
+
+  setEndSilo(tipoGrao: string): Promise<any> {
+    return this.storage.set('endSilo', tipoGrao);
+  }
+
   getUsername(): Promise<string> {
     return this.storage.get('username').then((value) => {
+      return value;
+    });
+  }
+
+  getTipoGrao(): Promise<string> {
+    return this.storage.get('tipoGrao').then((value) => {
+      return value;
+    });
+  }
+
+  getEndSilo(): Promise<string> {
+    return this.storage.get('endSilo').then((value) => {
       return value;
     });
   }

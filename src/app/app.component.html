@@ -11,7 +11,7 @@
 
         <ion-list>
           <ion-list-header>
-            Navigate
+            Navegar
           </ion-list-header>
           <ion-menu-toggle autoHide="false" *ngFor="let p of appPages; let i = index">
             <ion-item [routerLink]="p.url" routerLinkActive="active" routerDirection="root">
@@ -26,14 +26,14 @@
 
         <ion-list *ngIf="loggedIn">
           <ion-list-header>
-            Account
+            Segurança
           </ion-list-header>
 
           <ion-menu-toggle autoHide="false">
             <ion-item routerLink="/account" routerDirection="root">
               <ion-icon slot="start" name="person"></ion-icon>
               <ion-label>
-                Account
+                Conta
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -42,7 +42,7 @@
             <ion-item routerLink="/support" routerDirection="root">
               <ion-icon slot="start" name="help"></ion-icon>
               <ion-label>
-                Support
+                Suporte
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -60,7 +60,7 @@
 
         <ion-list *ngIf="!loggedIn">
           <ion-list-header>
-            Account
+            Segurança
           </ion-list-header>
 
           <ion-menu-toggle autoHide="false">
@@ -76,7 +76,7 @@
             <ion-item routerLink="/support" routerDirection="root">
               <ion-icon slot="start" name="help"></ion-icon>
               <ion-label>
-                Support
+                Suporte
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -85,13 +85,13 @@
             <ion-item routerLink="/signup" routerDirection="root">
               <ion-icon slot="start" name="person-add"></ion-icon>
               <ion-label>
-                Signup
+                Criar
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
 
-        <ion-list>
+        <!-- <ion-list>
           <ion-list-header>
             Tutorial
           </ion-list-header>
@@ -101,7 +101,7 @@
               <ion-label>Show Tutorial</ion-label>
             </ion-item>
           </ion-menu-toggle>
-        </ion-list>
+        </ion-list> -->
       </ion-content>
     </ion-menu>
 
