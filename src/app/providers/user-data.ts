@@ -58,6 +58,16 @@ export class UserData {
     return this.storage.set('username', username);
   }
 
+  setUser(username: string, password: string, endSilo: string, tipoGrao: string): Promise<any> {
+    let user = {
+      username: username,
+      password: password,
+      endSilo: endSilo,
+      tipoGrao: tipoGrao
+    };
+    return this.storage.set('user', user);
+  }
+
   setTipoGrao(tipoGrao: string): Promise<any> {
     return this.storage.set('tipoGrao', tipoGrao);
   }
