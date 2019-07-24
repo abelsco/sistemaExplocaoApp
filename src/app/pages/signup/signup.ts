@@ -14,7 +14,14 @@ import { Cliente } from '../../interfaces/user-options';
   styleUrls: ['./signup.scss'],
 })
 export class SignupPage {
-  signup: Cliente = { usuario: '', senha: '', nomeSilo: '', endSilo: '', tipoGrao: '' };
+  signup: Cliente = {
+    codCli: 0, 
+    usuario: '', 
+    senha: '', 
+    nomeSilo: '', 
+    endSilo: '', 
+    tipoGrao: '' 
+  };
   submitted = false;
   cliente: Cliente;
 
@@ -26,6 +33,7 @@ export class SignupPage {
   onSignup(form: NgForm) {
     this.submitted = true;
     this.cliente = {
+      codCli: 0,
       usuario: this.signup.usuario, 
       senha: this.signup.senha,
       nomeSilo: this.signup.nomeSilo,

@@ -1,13 +1,16 @@
 
 export interface Cliente {
+  codCli: number;
   usuario: string;
   senha: string;
   nomeSilo: string;
   endSilo: string;
   tipoGrao: string;
+
 }
 
 export interface Silo {
+  // codSilo: number;
   nomeSilo: string;
   dia: string;
   temperatura: number;

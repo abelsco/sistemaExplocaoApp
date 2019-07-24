@@ -1,3 +1,4 @@
+import { Cliente } from './../../interfaces/user-options';
 import { AfterViewInit, Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -12,8 +13,7 @@ import { UserData } from '../../providers/user-data';
   styleUrls: ['./account.scss'],
 })
 export class AccountPage implements AfterViewInit {
-  username: string;
-  tipoGrao: string;
+  cliente: Cliente;
 
   constructor(
     public alertCtrl: AlertController,
@@ -22,8 +22,7 @@ export class AccountPage implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
-    this.getUsername();
-    this.getTipoGrao();
+    this.getCliente();
   }
 
   updatePicture() {
@@ -34,39 +33,33 @@ export class AccountPage implements AfterViewInit {
   // clicking OK will update the username and display it
   // clicking Cancel will close the alert and do nothing
   async changeUsername() {
-    const alert = await this.alertCtrl.create({
-      header: 'Change Username',
-      buttons: [
-        'Cancel',
-        {
-          text: 'Ok',
-          handler: (data: any) => {
-            this.userData.setUsername(data.username);
-            this.getUsername();
-          }
-        }
-      ],
-      inputs: [
-        {
-          type: 'text',
-          name: 'username',
-          value: this.username,
-          placeholder: 'username'
-        }
-      ]
-    });
-    await alert.present();
+    // const alert = await this.alertCtrl.create({
+    //   header: 'Change Username',
+    //   buttons: [
+    //     'Cancel',
+    //     {
+    //       text: 'Ok',
+    //       handler: (data: any) => {
+    //         this.userData.setUsername(data.username);
+    //         this.getUsername();
+    //       }
+    //     }
+    //   ],
+    //   inputs: [
+    //     {
+    //       type: 'text',
+    //       name: 'username',
+    //       value: this.username,
+    //       placeholder: 'username'
+    //     }
+    //   ]
+    // });
+    // await alert.present();
   }
 
-  getUsername() {
-    this.userData.getUsername().then((username) => {
-      this.username = username;
-    });
-  }
-
-  getTipoGrao() {
-    this.userData.getTipoGrao().then((tipoGrao) => {
-      this.tipoGrao = tipoGrao;
+  getCliente() {
+    this.userData.getCliente().then((Cliente) => {
+      this.cliente = Cliente;      
     });
   }
 
@@ -76,7 +69,7 @@ export class AccountPage implements AfterViewInit {
 
   logout() {
     this.userData.logout();
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/app/tabs/schedule');
   }
 
   support() {

@@ -4,15 +4,18 @@ import { Events } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserData {
   _favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
+  SILO_IN = 'siloCorrente';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
   clientes: Cliente[] = [];
+  cliente: Cliente;
+  silos: Silo[] = [];
+  silo: Silo;
 
   constructor(
     public events: Events,
@@ -34,90 +37,66 @@ export class UserData {
     }
   }
 
-  login(username: string): Promise<any> {
-    return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.setUsername(username);
-      return this.events.publish('user:login');
-    });
+  login(username, senha): Promise<any> {
+    if (this.clientes.length >= 1) {
+      this.cliente = this.clientes.filter(x => x.usuario == username && x.senha == senha)[0];
+      return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
+        this.setLogin(this.cliente);
+        return this.events.publish('user:login');
+      });
+    }
   }
 
   signup(cliente: Cliente): Promise<any> {
+    cliente.codCli = this.clientes.length+1;
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.setUsername(cliente.usuario);
-      this.setTipoGrao(cliente.tipoGrao);
-      this.setCliente(cliente);
+      this.setClientes(cliente);
+      this.setLogin(cliente);
       return this.events.publish('user:signup');
     });
   }
 
   logout(): Promise<any> {
     return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-      return this.storage.remove('username');
+      return this.storage.remove('cliente');
     }).then(() => {
       this.events.publish('user:logout');
     });
   }
 
-  logoutCliente(usuario, senha): Promise<any> {
-    let aux = {
-      usuario: usuario, 
-      senha: senha,
-      nomeSilo: '',
-      endSilo: '',
-      tipoGrao: ''
-    }
-    return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-      return this.storage.remove('username');
-    }).then(() => {
-      this.events.publish('user:logout');
-    });
+  setLogin(cliente: Cliente): Promise<any> {
+    return this.storage.set('cliente', cliente);
   }
 
-  setUsername(username: string): Promise<any> {
-    return this.storage.set('username', username);
-  }
-
-  setCliente(cliente: Cliente): Promise<any> {
+  setClientes(cliente: Cliente): Promise<any> {
     this.clientes.push(cliente);
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.storage.set('clientes',this.clientes);
-      console.table(this.clientes);
-      console.table(this.storage.keys());            
+      this.storage.set('clientes', this.clientes);
     });
   }
 
-  setUser(username: string, password: string, endSilo: string, tipoGrao: string): Promise<any> {
-    let user = {
-      username: username,
-      password: password,
-      endSilo: endSilo,
-      tipoGrao: tipoGrao
-    };
-    return this.storage.set('user', user);
+  setSilo(silo: Silo): Promise<any> {
+    this.silos.push(silo);
+    return this.storage.set(this.SILO_IN, true).then(() => {
+      this.storage.set('silo', silo);
+      this.storage.set('silos', this.silos);
+    });
   }
 
-  setTipoGrao(tipoGrao: string): Promise<any> {
-    return this.storage.set('tipoGrao', tipoGrao);
-  }
-
-  setEndSilo(tipoGrao: string): Promise<any> {
-    return this.storage.set('endSilo', tipoGrao);
-  }
-
-  getUsername(): Promise<string> {
-    return this.storage.get('username').then((value) => {
+  getCliente(): Promise<Cliente> {
+    return this.storage.get('cliente').then((value) => {
       return value;
     });
   }
 
-  getTipoGrao(): Promise<string> {
-    return this.storage.get('tipoGrao').then((value) => {
+  getSilo(): Promise<Silo> {
+    return this.storage.get('silo').then((value) => {
       return value;
     });
   }
 
-  getEndSilo(): Promise<string> {
-    return this.storage.get('endSilo').then((value) => {
+  getClientes(): Promise<Cliente> {
+    return this.storage.get('clientes').then((value) => {
       return value;
     });
   }

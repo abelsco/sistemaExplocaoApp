@@ -14,7 +14,14 @@ import { Cliente } from '../../interfaces/user-options';
   styleUrls: ['./login.scss'],
 })
 export class LoginPage {
-  login: Cliente = { usuario: '', senha: '', nomeSilo: '', tipoGrao: '', endSilo: ''};
+  login: Cliente = { 
+    codCli: 0,
+    usuario: '', 
+    senha: '', 
+    nomeSilo: '', 
+    tipoGrao: '', 
+    endSilo: ''
+  };
   submitted = false;
 
   constructor(
@@ -26,7 +33,7 @@ export class LoginPage {
     this.submitted = true;
 
     if (form.valid) {
-      this.userData.login(this.login.usuario);
+      this.userData.login(this.login.usuario, this.login.senha);
       this.router.navigateByUrl('/app/tabs/schedule');
     }
   }
