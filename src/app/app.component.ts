@@ -10,6 +10,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Storage } from '@ionic/storage';
 
 import { UserData } from './providers/user-data';
+import { DatabaseService } from './providers/database.service';
 
 @Component({
   selector: 'app-root',
@@ -51,6 +52,7 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     private storage: Storage,
     private userData: UserData,
+    private dbs: DatabaseService,
     private swUpdate: SwUpdate,
     private toastCtrl: ToastController,
   ) {
