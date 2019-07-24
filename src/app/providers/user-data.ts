@@ -12,7 +12,7 @@ export class UserData {
   _favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  clientes: Cliente [];
+  clientes: Cliente[] = [];
 
   constructor(
     public events: Events,
@@ -80,11 +80,9 @@ export class UserData {
   setCliente(cliente: Cliente): Promise<any> {
     this.clientes.push(cliente);
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.storage.set('cliente',cliente);
-      this.storage.set('clientes',this.clientes.values);
-      console.table(cliente);
-      console.table(this.storage.keys());
-            
+      this.storage.set('clientes',this.clientes);
+      console.table(this.clientes);
+      console.table(this.storage.keys());            
     });
   }
 
