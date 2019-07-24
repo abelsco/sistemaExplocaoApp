@@ -17,11 +17,11 @@
     <ion-list lines="none">
       <ion-item>
         <ion-label position="stacked" color="primary">Nome do Silo</ion-label>
-        <ion-input [(ngModel)]="signup.username" name="username" type="text" #username="ngModel" required>
+        <ion-input [(ngModel)]="signup.usuario" name="usuario" type="text" #usuario="ngModel" required>
         </ion-input>
       </ion-item>
       <ion-text color="danger">
-        <p [hidden]="username.valid || submitted == false" class="ion-padding-start">
+        <p [hidden]="usuario.valid || submitted == false" class="ion-padding-start">
           Nome do Silo é obrigatório
         </p>
       </ion-text>
@@ -66,11 +66,11 @@
 
       <ion-item>
         <ion-label position="stacked" color="primary">Senha</ion-label>
-        <ion-input [(ngModel)]="signup.password" name="password" type="password" #password="ngModel" required>
+        <ion-input [(ngModel)]="signup.senha" name="senha" type="password" #senha="ngModel" required>
         </ion-input>
       </ion-item>
       <ion-text color="danger">
-        <p [hidden]="password.valid || submitted == false" class="ion-padding-start">
+        <p [hidden]="senha.valid || submitted == false" class="ion-padding-start">
           Senha é obrigatória
         </p>
       </ion-text>

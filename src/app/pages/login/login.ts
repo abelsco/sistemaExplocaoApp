@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { UserData } from '../../providers/user-data';
 
-import { UserOptions } from '../../interfaces/user-options';
+import { Cliente } from '../../interfaces/user-options';
 
 
 
@@ -14,7 +14,7 @@ import { UserOptions } from '../../interfaces/user-options';
   styleUrls: ['./login.scss'],
 })
 export class LoginPage {
-  login: UserOptions = { username: '', password: '', tipoGrao: '', endSilo: ''};
+  login: Cliente = { usuario: '', senha: '', nomeSilo: '', tipoGrao: '', endSilo: ''};
   submitted = false;
 
   constructor(
@@ -26,7 +26,7 @@ export class LoginPage {
     this.submitted = true;
 
     if (form.valid) {
-      this.userData.login(this.login.username);
+      this.userData.login(this.login.usuario);
       this.router.navigateByUrl('/app/tabs/schedule');
     }
   }

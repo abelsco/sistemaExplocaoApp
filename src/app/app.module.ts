@@ -20,19 +20,22 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
     AppRoutingModule,
     HttpClientModule,
     IonicModule.forRoot(),
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: '__mydb',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
     })
   ],
   declarations: [AppComponent],
   providers: [
-    InAppBrowser, 
-    SplashScreen, 
-    StatusBar, 
-    SQLite, 
+    InAppBrowser,
+    SplashScreen,
+    StatusBar,
+    SQLite,
     SQLitePorter
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

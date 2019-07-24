@@ -1,6 +1,8 @@
+import { Cliente, Silo } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+
 
 
 @Injectable({
@@ -10,6 +12,7 @@ export class UserData {
   _favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
+  clientes: Cliente [];
 
   constructor(
     public events: Events,
@@ -38,10 +41,11 @@ export class UserData {
     });
   }
 
-  signup(username: string, tipoGrao: string): Promise<any> {
+  signup(cliente: Cliente): Promise<any> {
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.setUsername(username);
-      this.setTipoGrao(tipoGrao);
+      this.setUsername(cliente.usuario);
+      this.setTipoGrao(cliente.tipoGrao);
+      this.setCliente(cliente);
       return this.events.publish('user:signup');
     });
   }
@@ -54,8 +58,34 @@ export class UserData {
     });
   }
 
+  logoutCliente(usuario, senha): Promise<any> {
+    let aux = {
+      usuario: usuario, 
+      senha: senha,
+      nomeSilo: '',
+      endSilo: '',
+      tipoGrao: ''
+    }
+    return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
+      return this.storage.remove('username');
+    }).then(() => {
+      this.events.publish('user:logout');
+    });
+  }
+
   setUsername(username: string): Promise<any> {
     return this.storage.set('username', username);
+  }
+
+  setCliente(cliente: Cliente): Promise<any> {
+    this.clientes.push(cliente);
+    return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
+      this.storage.set('cliente',cliente);
+      this.storage.set('clientes',this.clientes.values);
+      console.table(cliente);
+      console.table(this.storage.keys());
+            
+    });
   }
 
   setUser(username: string, password: string, endSilo: string, tipoGrao: string): Promise<any> {
