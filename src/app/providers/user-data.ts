@@ -2,9 +2,8 @@ import { Cliente, Silo } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -15,20 +14,18 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   SILO_IN = 'siloCorrente';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  url:string = 'http://192.168.0.9:5000'
+  url_storage: string = 'http://192.168.0.9:5000'
+  url_ambi: string = 'http://localhost:5000/ambiente/'
   clientes: Cliente[] = [];
   cliente: Cliente;
   silos: Silo[] = [];
   silo: Silo;
-  
+
   constructor(
     public events: Events,
     private storage: Storage,
     public http: HttpClient
-  ){ 
-
-    this.getClientes()
-  }
+  ) { }
 
   hasFavorite(sessionName: string): boolean {
     return (this._favorites.indexOf(sessionName) > -1);
@@ -56,11 +53,11 @@ export class UserData {
   }
 
   signup(cliente: Cliente): Promise<any> {
-    cliente.codCli = this.clientes.length+1;
+    cliente.codCli = this.clientes.length + 1;
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
+      this.setBancoCliente(cliente);
       this.setClientes(cliente);
       this.setLogin(cliente);
-      this.setBancoCliente(cliente);
       return this.events.publish('user:signup');
     });
   }
@@ -92,10 +89,18 @@ export class UserData {
     });
   }
 
-  setBancoCliente(cliente: Cliente): Observable<any>{
-    return this.http.post(this.url+ '/cliente?', cliente).pipe(
-
-    )
+  setBancoCliente(cliente: Cliente) {
+    let data = {
+      usuario: cliente.usuario,
+      senha: cliente.senha,
+      nomeSilo: cliente.nomeSilo,
+      endSilo: cliente.endSilo,
+      tipoGrao: cliente.tipoGrao,
+    }
+    return this.http.post(this.url_storage + '/cliente/', cliente)
+      .subscribe(result => {
+        console.log(result);
+      });
   }
 
   getCliente(): Promise<Cliente> {
@@ -110,20 +115,20 @@ export class UserData {
     });
   }
 
-  private saveCli(response){
+  private saveCli(response) {
     for (const key in response) {
       if (response.hasOwnProperty(key)) {
         this.clientes.push(response[key]);
       }
-    } 
+    }
   }
 
-  getClientes(){
-    this.http.get(this.url + '/cliente').subscribe(result =>{      
+  getClientes() {
+    this.http.get(this.url_storage + '/cliente/').subscribe(result => {
       const response = (result as Cliente);
-      this.saveCli(response);      
+      this.saveCli(response);
       return this.storage.set('clientes', this.clientes);
-    })    
+    });
   }
 
   isLoggedIn(): Promise<boolean> {
@@ -134,6 +139,18 @@ export class UserData {
 
   checkHasSeenTutorial(): Promise<string> {
     return this.storage.get(this.HAS_SEEN_TUTORIAL).then((value) => {
+      return value;
+    });
+  }
+
+  getAmbi(): Promise<Silo>{
+    this.http.get(this.url_ambi).subscribe(result => {
+      const response = (result as Silo)
+      this.silo = response;    
+      this.storage.set('silo', this.silo);      
+      // return result;      
+    });
+    return this.storage.get('silo').then((value) => {     
       return value;
     });
   }

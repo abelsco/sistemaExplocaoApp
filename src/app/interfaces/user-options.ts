@@ -47,18 +47,4 @@ situaSilo
 
 select * from Cliente where usuario = user and senha = senha;
  */
-/* signup(usuario, senha, nomeSilo, endSilo,  tipoGrao): Promise<any> {
-  this.cliente(usuario, senha, nomeSilo, endSilo,tipoGrao)
-  return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-    this.setcliente(this.cliente[
-      usuario = usuario,
-      senha = senha,
-      nomeSilo = nomeSilo,
-      endSilo = endSilo,
-      tipoGrao = tipoGrao
-    ]);
-    this.setTipoGrao(tipoGrao);
-    console.table(this.cliente);
-    return this.events.publish('user:signup');
-  });
-} */
+

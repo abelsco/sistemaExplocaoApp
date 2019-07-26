@@ -5,6 +5,7 @@ import { AlertController, IonList, LoadingController, ModalController, ToastCont
 import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
 import { ConferenceData } from '../../providers/conference-data';
 import { UserData } from '../../providers/user-data';
+import { Silo } from './../../interfaces/user-options';
 
 @Component({
   selector: 'page-schedule',
@@ -22,6 +23,13 @@ export class SchedulePage implements OnInit {
   shownSessions: any = [];
   groups: any = [];
   confDate: string;
+  atualSilo: Silo;
+  temperatura: number;
+  umidade: number;
+  pressao: number;
+  concePo: number;
+  conceOxi: number;
+  fonteIg: number;
 
   constructor(
     public alertCtrl: AlertController,
@@ -32,6 +40,10 @@ export class SchedulePage implements OnInit {
     public toastCtrl: ToastController,
     public user: UserData
   ) { }
+
+  ngAfterViewInit(){
+    this.updateAmb();
+  }
 
   ngOnInit() {
     this.updateSchedule();
@@ -127,5 +139,17 @@ export class SchedulePage implements OnInit {
     await loading.present();
     await loading.onWillDismiss();
     fab.close();
+  }
+
+  updateAmb() {
+    this.user.getAmbi().then((data) => {
+      this.atualSilo = data;
+      this.temperatura = this.atualSilo.temperatura;      
+      this.conceOxi = this.atualSilo.conceOxi;      
+      this.concePo = this.atualSilo.concePo;      
+      this.fonteIg = this.atualSilo.fonteIg;      
+      this.pressao = this.atualSilo.pressao;      
+      this.umidade = this.atualSilo.umidade;      
+    });
   }
 }
