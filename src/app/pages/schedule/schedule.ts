@@ -12,6 +12,7 @@ import { Silo } from './../../interfaces/user-options';
   templateUrl: 'schedule.html',
   styleUrls: ['./schedule.scss'],
 })
+
 export class SchedulePage implements OnInit {
   // Gets a reference to the list element
   @ViewChild('scheduleList') scheduleList: IonList;
@@ -23,6 +24,7 @@ export class SchedulePage implements OnInit {
   shownSessions: any = [];
   groups: any = [];
   confDate: string;
+  situaSilo: string;
   atualSilo: Silo;
   temperatura: number;
   umidade: number;
@@ -39,15 +41,19 @@ export class SchedulePage implements OnInit {
     public router: Router,
     public toastCtrl: ToastController,
     public user: UserData
-  ) { }
+  ) {  }
 
   ngAfterViewInit(){
-    this.updateAmb();
+    setInterval(() => { 
+      this.updateAmb(); // Now the "this" still references the component
+   }, 1000);
   }
 
   ngOnInit() {
     this.updateSchedule();
   }
+
+  
 
   updateSchedule() {
     // Close any open sliding items when the schedule updates
@@ -60,6 +66,7 @@ export class SchedulePage implements OnInit {
       this.groups = data.groups;
     });
   }
+    
 
   async presentFilter() {
     const modal = await this.modalCtrl.create({

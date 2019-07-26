@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Cliente, Silo } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
 import { Events } from '@ionic/angular';
@@ -143,7 +144,7 @@ export class UserData {
     });
   }
 
-  getAmbi(): Promise<Silo>{
+  async getAmbi(): Promise<Silo>{
     this.http.get(this.url_ambi).subscribe(result => {
       const response = (result as Silo)
       this.silo = response;    
