@@ -2,7 +2,7 @@ import { Cliente, Silo } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
 import { Events, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -13,7 +13,7 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   SILO_IN = 'siloCorrente';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  host: string = '192.168.42.201';
+  host: string = '192.168.15.5';
   url_storage: string = 'http://' + this.host + ':5001/api'
   url_ambi: string = 'http://' + this.host + ':5000/api/ambiente/'
   clientes: Cliente[] = [];
