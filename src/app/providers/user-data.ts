@@ -1,8 +1,8 @@
 import { Cliente, Silo } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
-import { Events } from '@ionic/angular';
+import { Events, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 
 @Injectable({
@@ -13,17 +13,20 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   SILO_IN = 'siloCorrente';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  url_storage: string = 'http://192.168.0.9:5000'
-  url_ambi: string = 'http://localhost:5000/ambiente/'
+  host: string = '192.168.42.201';
+  url_storage: string = 'http://' + this.host + ':5001/api'
+  url_ambi: string = 'http://' + this.host + ':5000/api/ambiente/'
   clientes: Cliente[] = [];
   cliente: Cliente;
   silos: Silo[] = [];
   silo: Silo;
+  parametro: Silo;
 
   constructor(
     public events: Events,
     private storage: Storage,
-    public http: HttpClient
+    public httpClient: HttpClient,
+    private os: Platform
   ) { }
 
   hasFavorite(sessionName: string): boolean {
@@ -96,7 +99,7 @@ export class UserData {
       endSilo: cliente.endSilo,
       tipoGrao: cliente.tipoGrao,
     }
-    return this.http.post(this.url_storage + '/cliente/', cliente)
+    return this.httpClient.post(this.url_storage + '/cliente/', cliente)
       .subscribe(result => {
         console.log(result);
       });
@@ -122,10 +125,9 @@ export class UserData {
     }
   }
 
-  getClientes() {
-    this.http.get(this.url_storage + '/cliente/').subscribe(result => {
-      const response = (result as Cliente);
-      this.saveCli(response);
+  getClientes() {    
+    this.httpClient.get<Cliente>(this.url_storage + '/cliente/').subscribe(result => {
+      this.saveCli(result);
       return this.storage.set('clientes', this.clientes);
     });
   }
@@ -142,15 +144,24 @@ export class UserData {
     });
   }
 
-  async getAmbi(): Promise<Silo>{
-    this.http.get(this.url_ambi).subscribe(result => {
-      const response = (result as Silo)
-      this.silo = response;    
-      this.storage.set('silo', this.silo);      
-      // return result;      
+  async getAmbi(): Promise<Silo> {
+    this.httpClient.head(this.url_ambi).subscribe(ok => {
+      console.log(ok);
+
+      this.storage.get('cliente').then((cliente) => {
+        this.httpClient.post(this.url_ambi, cliente).subscribe(resul => {
+          this.httpClient.get(this.url_ambi).subscribe(result => {
+            const response = (result as Silo)
+            this.silo = response;
+            this.storage.set('silo', this.silo);
+            // return result;      
+          });
+        });
+      });
     });
-    return this.storage.get('silo').then((value) => {     
+    return this.storage.get('silo').then((value) => {
       return value;
     });
   }
+
 }

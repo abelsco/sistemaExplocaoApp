@@ -25,13 +25,17 @@ export class SchedulePage implements OnInit {
   groups: any = [];
   confDate: string;
   situaSilo: string;
-  atualSilo: Silo;
-  temperatura: number;
-  umidade: number;
-  pressao: number;
-  concePo: number;
-  conceOxi: number;
-  fonteIg: number;
+  atualSilo: Silo = {
+    nomeSilo: '',
+    dia: '',
+    temperatura: 0,
+    umidade: 0,
+    pressao: 0,
+    concePo: 0,
+    conceOxi: 0,
+    fonteIg: 0,
+    situaSilo: 0
+  };
 
   constructor(
     public alertCtrl: AlertController,
@@ -150,13 +154,7 @@ export class SchedulePage implements OnInit {
 
   updateAmb() {
     this.user.getAmbi().then((data) => {
-      this.atualSilo = data;
-      this.temperatura = this.atualSilo.temperatura;      
-      this.conceOxi = this.atualSilo.conceOxi;      
-      this.concePo = this.atualSilo.concePo;      
-      this.fonteIg = this.atualSilo.fonteIg;      
-      this.pressao = this.atualSilo.pressao;      
-      this.umidade = this.atualSilo.umidade;      
+      this.atualSilo = data;  
     });
   }
 }

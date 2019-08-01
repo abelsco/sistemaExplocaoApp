@@ -19,7 +19,7 @@ export interface Silo {
   concePo: number;
   conceOxi: number;
   fonteIg: number;
-  situaSilo: string;
+  situaSilo: number;
 }
 
 /* -Cliente-
