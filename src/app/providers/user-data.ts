@@ -13,7 +13,7 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   SILO_IN = 'siloCorrente';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  host: string = '192.168.15.5';
+  host: string = '192.168.42.201';
   url_storage: string = 'http://' + this.host + ':5001/api'
   url_ambi: string = 'http://' + this.host + ':5000/api/ambiente/'
   clientes: Cliente[] = [];
@@ -146,8 +146,6 @@ export class UserData {
 
   async getAmbi(): Promise<Silo> {
     this.httpClient.head(this.url_ambi).subscribe(ok => {
-      console.log(ok);
-
       this.storage.get('cliente').then((cliente) => {
         this.httpClient.post(this.url_ambi, cliente).subscribe(resul => {
           this.httpClient.get(this.url_ambi).subscribe(result => {

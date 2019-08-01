@@ -25,6 +25,7 @@ export class SchedulePage implements OnInit {
   groups: any = [];
   confDate: string;
   situaSilo: string;
+  loop: NodeJS.Timeout;
   atualSilo: Silo = {
     nomeSilo: '',
     dia: '',
@@ -45,19 +46,18 @@ export class SchedulePage implements OnInit {
     public router: Router,
     public toastCtrl: ToastController,
     public user: UserData
-  ) {  }
-
-  ngAfterViewInit(){
-    setInterval(() => { 
-      this.updateAmb(); // Now the "this" still references the component
-   }, 1000);
-  }
+  ) { }
 
   ngOnInit() {
     this.updateSchedule();
+    this.loop = setInterval(() => {
+        this.updateAmb();
+    }, 1000);
   }
 
-  
+  ngOnDestroy() {
+    clearInterval(this.loop);
+  }
 
   updateSchedule() {
     // Close any open sliding items when the schedule updates
@@ -70,7 +70,6 @@ export class SchedulePage implements OnInit {
       this.groups = data.groups;
     });
   }
-    
 
   async presentFilter() {
     const modal = await this.modalCtrl.create({
@@ -144,7 +143,7 @@ export class SchedulePage implements OnInit {
 
   async openSocial(network: string, fab: HTMLIonFabElement) {
     const loading = await this.loadingCtrl.create({
-      message: `Posting to ${network}`,
+      message: 'Posting to ${network}',
       duration: (Math.random() * 1000) + 500
     });
     await loading.present();
@@ -154,7 +153,7 @@ export class SchedulePage implements OnInit {
 
   updateAmb() {
     this.user.getAmbi().then((data) => {
-      this.atualSilo = data;  
+      this.atualSilo = data;
     });
   }
 }
