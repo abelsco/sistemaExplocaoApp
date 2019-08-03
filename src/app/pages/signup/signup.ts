@@ -23,7 +23,14 @@ export class SignupPage {
     tipoGrao: '' 
   };
   submitted = false;
-  cliente: Cliente;
+  cliente: Cliente = { 
+    codCli: 0,
+    usuario: '', 
+    senha: '', 
+    nomeSilo: '', 
+    tipoGrao: '', 
+    endSilo: ''
+  };
 
   constructor(
     public router: Router,

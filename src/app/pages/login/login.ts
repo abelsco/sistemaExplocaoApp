@@ -27,9 +27,7 @@ export class LoginPage {
   constructor(
     public userData: UserData,
     public router: Router
-  ) { 
-    userData.getClientes();
-  }
+  ) { }
 
   onLogin(form: NgForm) {
     this.submitted = true;

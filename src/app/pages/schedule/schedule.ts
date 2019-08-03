@@ -5,6 +5,7 @@ import { AlertController, IonList, LoadingController, ModalController, ToastCont
 import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
 import { ConferenceData } from '../../providers/conference-data';
 import { UserData } from '../../providers/user-data';
+import { DbDataService } from '../../providers/db-data.service';
 import { Silo } from './../../interfaces/user-options';
 
 @Component({
@@ -45,7 +46,8 @@ export class SchedulePage implements OnInit {
     public modalCtrl: ModalController,
     public router: Router,
     public toastCtrl: ToastController,
-    public user: UserData
+    private user: UserData,
+    private db: DbDataService
   ) { }
 
   ngOnInit() {
@@ -151,8 +153,8 @@ export class SchedulePage implements OnInit {
     fab.close();
   }
 
-  updateAmb() {
-    this.user.getAmbi().then((data) => {
+  async updateAmb() {
+    this.db.getAmbi().then((data) => {
       this.atualSilo = data;
     });
   }

@@ -13,7 +13,14 @@ import { UserData } from '../../providers/user-data';
   styleUrls: ['./account.scss'],
 })
 export class AccountPage implements AfterViewInit {
-  cliente: Cliente;
+  cliente: Cliente = { 
+    codCli: 0,
+    usuario: '', 
+    senha: '', 
+    nomeSilo: '', 
+    tipoGrao: '', 
+    endSilo: ''
+  };
 
   constructor(
     public alertCtrl: AlertController,

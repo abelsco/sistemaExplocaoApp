@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Events, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { HttpClient } from '@angular/common/http';
+import { DbDataService } from './db-data.service';
 
 
 @Injectable({
@@ -13,11 +14,14 @@ export class UserData {
   HAS_LOGGED_IN = 'hasLoggedIn';
   SILO_IN = 'siloCorrente';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  host: string = '192.168.42.201';
-  url_storage: string = 'http://' + this.host + ':5001/api'
-  url_ambi: string = 'http://' + this.host + ':5000/api/ambiente/'
-  clientes: Cliente[] = [];
-  cliente: Cliente;
+  cliente: Cliente = { 
+    codCli: 0,
+    usuario: '', 
+    senha: '', 
+    nomeSilo: '', 
+    tipoGrao: '', 
+    endSilo: ''
+  };
   silos: Silo[] = [];
   silo: Silo;
   parametro: Silo;
@@ -25,6 +29,7 @@ export class UserData {
   constructor(
     public events: Events,
     private storage: Storage,
+    private dbData: DbDataService,
     public httpClient: HttpClient,
     private os: Platform
   ) { }
@@ -44,122 +49,61 @@ export class UserData {
     }
   }
 
-  login(username, senha): Promise<any> {
-    if (this.clientes.length >= 1) {
-      this.cliente = this.clientes.filter(x => x.usuario == username && x.senha == senha)[0];
-      return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-        this.setLogin(this.cliente);
+  async login(usuario: string, senha: string){
+    this.dbData.getLogin(usuario, senha);
+    this.storage.get('cliente').then(value => {
+      console.log(value);
+      const cliente = (value as Cliente)
+      
+      if (cliente.codCli != 0) {
+        this.storage.set(this.HAS_LOGGED_IN, true);
+        this.setLogin(cliente);
         return this.events.publish('user:login');
-      });
-    }
-  }
-
-  signup(cliente: Cliente): Promise<any> {
-    cliente.codCli = this.clientes.length + 1;
-    return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.setBancoCliente(cliente);
-      this.setClientes(cliente);
-      this.setLogin(cliente);
-      return this.events.publish('user:signup');
+      }
     });
   }
 
-  logout(): Promise<any> {
-    return this.storage.remove(this.HAS_LOGGED_IN).then(() => {
-      return this.storage.remove('cliente');
-    }).then(() => {
-      this.events.publish('user:logout');
-    });
+  async signup(cliente: Cliente): Promise<any> {
+    await this.storage.set(this.HAS_LOGGED_IN, true);
+    this.dbData.postCliente(cliente);
+    this.setLogin(cliente);
+    return this.events.publish('user:signup');
   }
 
-  setLogin(cliente: Cliente): Promise<any> {
+  async logout(): Promise<any> {
+    await this.storage.remove(this.HAS_LOGGED_IN);
+    await this.storage.remove('cliente');
+    this.events.publish('user:logout');
+  }
+
+  private setLogin(cliente: Cliente): Promise<any> {
     return this.storage.set('cliente', cliente);
   }
 
-  setClientes(cliente: Cliente): Promise<any> {
-    this.clientes.push(cliente);
-    return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
-      this.storage.set('clientes', this.clientes);
-    });
-  }
-
-  setSilo(silo: Silo): Promise<any> {
+  private async setSilo(silo: Silo): Promise<any> {
     this.silos.push(silo);
-    return this.storage.set(this.SILO_IN, true).then(() => {
-      this.storage.set('silo', silo);
-      this.storage.set('silos', this.silos);
-    });
+    await this.storage.set(this.SILO_IN, true);
+    this.storage.set('silo', silo);
+    this.storage.set('silos', this.silos);
   }
 
-  setBancoCliente(cliente: Cliente) {
-    let data = {
-      usuario: cliente.usuario,
-      senha: cliente.senha,
-      nomeSilo: cliente.nomeSilo,
-      endSilo: cliente.endSilo,
-      tipoGrao: cliente.tipoGrao,
-    }
-    return this.httpClient.post(this.url_storage + '/cliente/', cliente)
-      .subscribe(result => {
-        console.log(result);
-      });
+  async getCliente(): Promise<Cliente> {
+    const value = await this.storage.get('cliente');
+    return value;
   }
 
-  getCliente(): Promise<Cliente> {
-    return this.storage.get('cliente').then((value) => {
-      return value;
-    });
+  async getSilo(): Promise<Silo> {
+    const value = await this.storage.get('silo');
+    return value;
   }
 
-  getSilo(): Promise<Silo> {
-    return this.storage.get('silo').then((value) => {
-      return value;
-    });
+  async isLoggedIn(): Promise<boolean> {
+    const value = await this.storage.get(this.HAS_LOGGED_IN);
+    return value === true;
   }
 
-  private saveCli(response) {
-    for (const key in response) {
-      if (response.hasOwnProperty(key)) {
-        this.clientes.push(response[key]);
-      }
-    }
+  async checkHasSeenTutorial(): Promise<string> {
+    const value = await this.storage.get(this.HAS_SEEN_TUTORIAL);
+    return value;
   }
-
-  getClientes() {    
-    this.httpClient.get<Cliente>(this.url_storage + '/cliente/').subscribe(result => {
-      this.saveCli(result);
-      return this.storage.set('clientes', this.clientes);
-    });
-  }
-
-  isLoggedIn(): Promise<boolean> {
-    return this.storage.get(this.HAS_LOGGED_IN).then((value) => {
-      return value === true;
-    });
-  }
-
-  checkHasSeenTutorial(): Promise<string> {
-    return this.storage.get(this.HAS_SEEN_TUTORIAL).then((value) => {
-      return value;
-    });
-  }
-
-  async getAmbi(): Promise<Silo> {
-    this.httpClient.head(this.url_ambi).subscribe(ok => {
-      this.storage.get('cliente').then((cliente) => {
-        this.httpClient.post(this.url_ambi, cliente).subscribe(resul => {
-          this.httpClient.get(this.url_ambi).subscribe(result => {
-            const response = (result as Silo)
-            this.silo = response;
-            this.storage.set('silo', this.silo);
-            // return result;      
-          });
-        });
-      });
-    });
-    return this.storage.get('silo').then((value) => {
-      return value;
-    });
-  }
-
 }
