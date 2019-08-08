@@ -29,11 +29,11 @@ export class LoginPage {
     public router: Router
   ) { }
 
-  onLogin(form: NgForm) {
+  async onLogin(form: NgForm) {
     this.submitted = true;
 
     if (form.valid) {
-      this.userData.login(this.login.usuario, this.login.senha);
+      await this.userData.login(this.login.usuario, this.login.senha);
       this.router.navigateByUrl('/app/tabs/schedule');
     }
   }

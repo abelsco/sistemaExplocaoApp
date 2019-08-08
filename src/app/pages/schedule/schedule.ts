@@ -28,14 +28,21 @@ export class SchedulePage implements OnInit {
   situaSilo: string;
   loop: NodeJS.Timeout;
   atualSilo: Silo = {
-    nomeSilo: '',
+    codSilo: 0,
+    codCli: 0,
     dia: '',
     temperatura: 0,
+    situTemperatura: 0,
     umidade: 0,
+    situUmidade: 0,
     pressao: 0,
+    situPressao: 0,
     concePo: 0,
+    situConcePo: 0,
     conceOxi: 0,
+    situConceOxi: 0,
     fonteIg: 0,
+    situFonteIg: 0,
     situaSilo: 0
   };
 
@@ -54,7 +61,7 @@ export class SchedulePage implements OnInit {
     this.updateSchedule();
     this.loop = setInterval(() => {
         this.updateAmb();
-    }, 1000);
+    }, 2500);
   }
 
   ngOnDestroy() {

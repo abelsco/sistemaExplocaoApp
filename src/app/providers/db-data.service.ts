@@ -8,15 +8,15 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root'
 })
 export class DbDataService {
-  host: string = '192.168.15.5';
+  host: string = '192.168.42.201';
   url_storage: string = 'http://' + this.host + ':5001/api/'
   url_ambi: string = 'http://' + this.host + ':5000/api/ambiente/'
-  cliente: Cliente = { 
+  cliente: Cliente = {
     codCli: 0,
-    usuario: '', 
-    senha: '', 
-    nomeSilo: '', 
-    tipoGrao: '', 
+    usuario: '',
+    senha: '',
+    nomeSilo: '',
+    tipoGrao: '',
     endSilo: ''
   };
   silos: Silo[] = [];
@@ -39,7 +39,7 @@ export class DbDataService {
       .subscribe(() => { });
   }
 
-  async getLogin(usuario: string, senha: string) {
+  async getLogin(usuario: string, senha: string): Promise<any> {
     this.httpClient.get<Array<Cliente>>(this.url_storage + 'login?usuario=' + usuario + '&senha=' + senha).subscribe(result => {
       this.cliente = {
         codCli: 0,
@@ -51,7 +51,13 @@ export class DbDataService {
       };
       if (result.length == 1)
         this.cliente = result.pop();
-      return this.storage.set('cliente', this.cliente)
+      return this.storage.set('cliente', this.cliente);
+    });
+  }
+
+  async postTipoGrao(cliente: Cliente) {
+    return this.httpClient.post(this.url_storage + 'cliente/endsilo/', cliente).subscribe((response) => {
+      console.log(response);
     });
   }
 
@@ -70,6 +76,12 @@ export class DbDataService {
     return this.storage.get('silo').then((value) => {
       return value;
     });
+  }
+
+  setHost(atual: string) {
+    this.url_storage = atual;
+    console.log(this.url_storage);
+
   }
 
 }

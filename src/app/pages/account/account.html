@@ -10,13 +10,13 @@
 <ion-content class="outer-content">
   <div *ngIf="cliente" class="ion-padding-top ion-text-center">
     <img src="https://www.gravatar.com/avatar?d=mm&s=140" alt="avatar">
-    <h2>{{cliente.usuario}}: {{cliente.tipoGrao}}</h2>
-
+    <h2>Bem vindo(a) {{cliente.usuario}}</h2>
+      <h2>Tipo do grão armazenado: {{cliente.tipoGrao}}</h2>
     <ion-list inset>
-      <!-- <ion-item (click)="updatePicture()">Mudar Foto</ion-item> -->
-      <!-- <ion-item (click)="changeUsername()">Mudar Usuário</ion-item> -->
-      <!-- <ion-item (click)="changePassword()">Mudar Senha</ion-item> -->
-      <ion-item (click)="support()">Suporte</ion-item>
+      <!-- <ion-item (click)="changeTipoGrao()">Mudar Tipo Grão</ion-item> -->
+      <ion-item (click)="changeEndSilo()">Mudar Endereço do Silo</ion-item>
+      <!-- <ion-item (click)="changeSenha()">Mudar Senha</ion-item> -->
+      <!-- <ion-item (click)="support()">Suporte</ion-item> -->
       <ion-item (click)="logout()">Logout</ion-item>
     </ion-list>
   </div>

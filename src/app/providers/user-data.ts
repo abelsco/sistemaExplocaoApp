@@ -2,7 +2,6 @@ import { Cliente, Silo } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
 import { Events, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { HttpClient } from '@angular/common/http';
 import { DbDataService } from './db-data.service';
 
 
@@ -30,7 +29,6 @@ export class UserData {
     public events: Events,
     private storage: Storage,
     private dbData: DbDataService,
-    public httpClient: HttpClient,
     private os: Platform
   ) { }
 
@@ -49,16 +47,16 @@ export class UserData {
     }
   }
 
-  async login(usuario: string, senha: string){
+  login(usuario: string, senha: string): Promise<any> {
     this.dbData.getLogin(usuario, senha);
-    this.storage.get('cliente').then(value => {
+    return this.storage.get('cliente').then(async value => {
       console.log(value);
-      const cliente = (value as Cliente)
+      const cliente = (value as Cliente);
       
       if (cliente.codCli != 0) {
-        this.storage.set(this.HAS_LOGGED_IN, true);
+        await this.storage.set(this.HAS_LOGGED_IN, true);
         this.setLogin(cliente);
-        return this.events.publish('user:login');
+        return this.events.publish('user:login');        
       }
     });
   }

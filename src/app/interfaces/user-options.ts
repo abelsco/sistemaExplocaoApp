@@ -10,15 +10,21 @@ export interface Cliente {
 }
 
 export interface Silo {
-  // codSilo: number;
-  nomeSilo: string;
+  codSilo: number;
+  codCli: number;
   dia: string;
-  temperatura: number;
+  temperatura: number;  
+  situTemperatura: number;  
   umidade: number;
+  situUmidade: number;
   pressao: number;
+  situPressao: number;
   concePo: number;
+  situConcePo: number;
   conceOxi: number;
+  situConceOxi: number;
   fonteIg: number;
+  situFonteIg: number;
   situaSilo: number;
 }
 
