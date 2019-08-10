@@ -47,18 +47,16 @@ export class UserData {
     }
   }
 
-  login(usuario: string, senha: string): Promise<any> {
+  async login(usuario: string, senha: string): Promise<any> {
     this.dbData.getLogin(usuario, senha);
-    return this.storage.get('cliente').then(async value => {
-      console.log(value);
-      const cliente = (value as Cliente);
-      
-      if (cliente.codCli != 0) {
-        await this.storage.set(this.HAS_LOGGED_IN, true);
-        this.setLogin(cliente);
-        return this.events.publish('user:login');        
-      }
-    });
+    const value = await this.storage.get('cliente');
+    console.log(value);
+    const cliente = (value as Cliente);
+    if (cliente.codCli != 0) {
+      await this.storage.set(this.HAS_LOGGED_IN, true);
+      this.setLogin(cliente);
+      return this.events.publish('user:login');
+    }
   }
 
   async signup(cliente: Cliente): Promise<any> {

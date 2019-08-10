@@ -40,7 +40,7 @@ export class DbDataService {
   }
 
   async getLogin(usuario: string, senha: string): Promise<any> {
-    this.httpClient.get<Array<Cliente>>(this.url_storage + 'login?usuario=' + usuario + '&senha=' + senha).subscribe(result => {
+    await this.httpClient.get<Array<Cliente>>(this.url_storage + 'login?usuario=' + usuario + '&senha=' + senha).subscribe(result => {
       this.cliente = {
         codCli: 0,
         usuario: '',
@@ -50,8 +50,8 @@ export class DbDataService {
         endSilo: ''
       };
       if (result.length == 1)
-        this.cliente = result.pop();
-      return this.storage.set('cliente', this.cliente);
+        this.cliente = <Cliente>result.pop();
+      return this.storage.set('cliente', this.cliente).finally();
     });
   }
 
@@ -81,7 +81,6 @@ export class DbDataService {
   setHost(atual: string) {
     this.url_storage = atual;
     console.log(this.url_storage);
-
   }
 
 }
