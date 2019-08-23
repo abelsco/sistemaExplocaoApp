@@ -1,16 +1,26 @@
 import { Cliente, Silo } from './../interfaces/user-options';
 // import { UserData } from './user-data';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': 'my-auth-token',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, GET '
+  })
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbDataService {
-  host: string = '192.168.42.201';
-  url_storage: string = 'http://' + this.host + ':5001/api/'
-  url_ambi: string = 'http://' + this.host + ':5000/api/ambiente/'
+  // hostStorage: string = '192.168.16.254';
+  hostStorage: string = '192.168.42.218';
+  url_storage: string = 'http://' + this.hostStorage + ':5001/api/';
+  // url_ambi: string = 'http://' + this.hostAmbiente + ':5000/api/ambiente/'
   cliente: Cliente = {
     codCli: 0,
     usuario: '',
@@ -61,26 +71,21 @@ export class DbDataService {
     });
   }
 
-  async getAmbi(): Promise<Silo> {
-    this.httpClient.head(this.url_ambi).subscribe(ok => {
-      this.storage.get('cliente').then((cliente: Cliente) => {
-        this.httpClient.post(this.url_ambi, cliente).subscribe(() => {
-          this.httpClient.get(this.url_ambi).subscribe(result => {
-            const response = (result as Silo)
-            this.silo = response;
-            this.storage.set('silo', this.silo);
-          });
-        });
+  async getAmbi(atual: Cliente): Promise<Silo> {
+    this.storage.get('cliente').then(async (cliente: Cliente) => {
+      // this.httpClient.post(this.url_ambi, cliente).subscribe(async () => {
+      await this.httpClient.get(atual.endSilo).subscribe(result => {
+        console.log(result);
+
+        const response = (result as Silo)
+        this.silo = response;
+        this.storage.set('silo', this.silo);
       });
+      // });
     });
     return this.storage.get('silo').then((value) => {
       return value;
     });
-  }
-
-  setHost(atual: string) {
-    this.url_storage = atual;
-    console.log(this.url_storage);
   }
 
 }

@@ -60,7 +60,7 @@ export class SchedulePage implements OnInit {
   ngOnInit() {
     this.updateSchedule();
     this.loop = setInterval(() => {
-        this.updateAmb();
+      this.updateAmb();
     }, 2500);
   }
 
@@ -161,8 +161,10 @@ export class SchedulePage implements OnInit {
   }
 
   async updateAmb() {
-    this.db.getAmbi().then((data) => {
-      this.atualSilo = data;
+    this.user.getCliente().then(atual => {
+      this.db.getAmbi(atual).then((data) => {
+        this.atualSilo = data;        
+      });
     });
   }
 }

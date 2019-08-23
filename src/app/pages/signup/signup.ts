@@ -15,36 +15,36 @@ import { Cliente } from '../../interfaces/user-options';
 })
 export class SignupPage {
   signup: Cliente = {
-    codCli: 0, 
-    usuario: '', 
-    senha: '', 
-    nomeSilo: '', 
-    endSilo: '', 
-    tipoGrao: '' 
+    codCli: 0,
+    usuario: '',
+    senha: '',
+    nomeSilo: '',
+    endSilo: '',
+    tipoGrao: ''
   };
   submitted = false;
-  cliente: Cliente = { 
+  cliente: Cliente = {
     codCli: 0,
-    usuario: '', 
-    senha: '', 
-    nomeSilo: '', 
-    tipoGrao: '', 
+    usuario: '',
+    senha: '',
+    nomeSilo: '',
+    tipoGrao: '',
     endSilo: ''
   };
 
   constructor(
     public router: Router,
     public userData: UserData
-  ) {}
+  ) { }
 
   onSignup(form: NgForm) {
     this.submitted = true;
     this.cliente = {
       codCli: 0,
-      usuario: this.signup.usuario, 
+      usuario: this.signup.usuario,
       senha: this.signup.senha,
       nomeSilo: this.signup.nomeSilo,
-      endSilo: this.signup.endSilo,
+      endSilo: 'http://' + this.signup.endSilo + ':5000/api/ambiente/',
       tipoGrao: this.signup.tipoGrao
     }
     if (form.valid) {

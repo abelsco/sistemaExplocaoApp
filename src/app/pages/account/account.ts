@@ -51,8 +51,7 @@ export class AccountPage implements AfterViewInit {
           text: 'Ok',
           handler: (data: any) => {
             this.cliente.endSilo = data.endSilo;
-            this.dbData.postTipoGrao(this.cliente);
-            this.dbData.setHost(this.cliente.endSilo);                    
+            this.dbData.postTipoGrao(this.cliente);               
             this.getCliente();
           }
         }
