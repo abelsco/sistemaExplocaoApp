@@ -4,22 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { SchedulePage } from './schedule';
-import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
 import { SchedulePageRoutingModule } from './schedule-routing.module';
+import { GaugeModule } from "angular-gauge";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SchedulePageRoutingModule
+    SchedulePageRoutingModule,
+    GaugeModule.forRoot()
   ],
   declarations: [
     SchedulePage,
-    ScheduleFilterPage
   ],
   entryComponents: [
-    ScheduleFilterPage
   ]
 })
 export class ScheduleModule { }
