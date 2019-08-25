@@ -50,11 +50,10 @@ export class UserData {
   async login(usuario: string, senha: string): Promise<any> {
     this.dbData.getLogin(usuario, senha);
     const value = await this.storage.get('cliente');
-    console.log(value);
     const cliente = (value as Cliente);
     if (cliente.codCli != 0) {
       await this.storage.set(this.HAS_LOGGED_IN, true);
-      this.setLogin(cliente);
+      this.setCliente(cliente);
       return this.events.publish('user:login');
     }
   }
@@ -62,7 +61,7 @@ export class UserData {
   async signup(cliente: Cliente): Promise<any> {
     await this.storage.set(this.HAS_LOGGED_IN, true);
     this.dbData.postCliente(cliente);
-    this.setLogin(cliente);
+    this.setCliente(cliente);
     return this.events.publish('user:signup');
   }
 
@@ -72,7 +71,7 @@ export class UserData {
     this.events.publish('user:logout');
   }
 
-  private setLogin(cliente: Cliente): Promise<any> {
+  setCliente(cliente: Cliente): Promise<any> {
     return this.storage.set('cliente', cliente);
   }
 
@@ -92,6 +91,7 @@ export class UserData {
     const value = await this.storage.get('silo');
     return value;
   }
+
 
   async isLoggedIn(): Promise<boolean> {
     const value = await this.storage.get(this.HAS_LOGGED_IN);

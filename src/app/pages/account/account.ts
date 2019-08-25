@@ -50,9 +50,10 @@ export class AccountPage implements AfterViewInit {
         {
           text: 'Ok',
           handler: (data: any) => {
-            this.cliente.endSilo = data.endSilo;
-            this.dbData.postTipoGrao(this.cliente);               
             this.getCliente();
+            this.cliente.endSilo = data.endSilo;
+            this.dbData.postEndSilo(this.cliente);
+            this.userData.setCliente(this.cliente);
           }
         }
       ],
@@ -68,9 +69,9 @@ export class AccountPage implements AfterViewInit {
     await alert.present();
   }
 
-  getCliente() {
-    this.userData.getCliente().then((Cliente) => {
-      this.cliente = Cliente;      
+  async getCliente() {
+    await this.userData.getCliente().then((atual) => {
+      this.cliente = atual;      
     });
   }
 

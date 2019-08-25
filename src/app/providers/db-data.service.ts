@@ -17,8 +17,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class DbDataService {
-  // hostStorage: string = '192.168.16.254';
-  hostStorage: string = '192.168.42.218';
+  hostStorage: string = '192.168.16.254';
+  // hostStorage: string = '192.168.42.253';
   url_storage: string = 'http://' + this.hostStorage + ':5001/api/';
   // url_ambi: string = 'http://' + this.hostAmbiente + ':5000/api/ambiente/'
   cliente: Cliente = {
@@ -65,7 +65,7 @@ export class DbDataService {
     });
   }
 
-  async postTipoGrao(cliente: Cliente) {
+  async postEndSilo(cliente: Cliente) {
     return this.httpClient.post(this.url_storage + 'cliente/endsilo/', cliente).subscribe((response) => {
       console.log(response);
     });
