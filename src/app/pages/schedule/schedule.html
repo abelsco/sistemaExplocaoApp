@@ -15,30 +15,50 @@
 </ion-header>
 <ion-content>
   <ion-list #scheduleList [hidden]="segment !== 'monitoramento'">
-      <ion-row class="row-title">
-          <ion-col>
-            <h3>Temperatura: {{atualSilo.temperatura}} ºC</h3>
-            <h3>Umidade: {{atualSilo.umidade}} %</h3>
-            <h3>Pressão: {{atualSilo.pressao}} kg/m²</h3>
-            <h3>Concentração de Pó: {{atualSilo.concePo}} g/m³</h3>
-            <h3>Fonte de ignição: {{atualSilo.fonteIg}} J</h3>
-            <h3>Oxigênio: {{atualSilo.conceOxi}} %</h3>
-          </ion-col>
-        </ion-row>
+    <ion-row class="row-title">
+      <ion-col>
+        <h3>Temperatura: {{atualSilo.temperatura}} ºC</h3>
+        <h3>Umidade: {{atualSilo.umidade}} %</h3>
+        <h3>Pressão: {{atualSilo.pressao}} kg/m²</h3>
+        <h3>Concentração de Pó: {{atualSilo.concePo}} g/m³</h3>
+        <h3>Fonte de ignição: {{atualSilo.fonteIg}} J</h3>
+        <h3>Oxigênio: {{atualSilo.conceOxi}} %</h3>
+      </ion-col>
+    </ion-row>
   </ion-list>
 
   <ion-list-header [hidden]="segment !== 'detalhe'">
     <ion-row class="row-title">
+      <h3>Situação do Silo: </h3>
+      <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situaSilo"
+        [animated]="true" [animationDuration]="1">
+      </mwl-gauge>
+      <ion-col></ion-col>
       <ion-col>
-        <h3>Situação do Silo: {{atualSilo.situaSilo}}</h3>
-        <h3>Situação Temperatura: {{atualSilo.situTemperatura}}</h3>
-        <h3>Situação Umidade: {{atualSilo.situUmidade}}</h3>
-        <h3>Situação Pressão: {{atualSilo.situPressao}}</h3>
-        <h3>Situação Poeira: {{atualSilo.situConcePo}}</h3>
-        <h3>Situação Oxigênio: {{atualSilo.situConceOxi}}</h3>
-        <h3>Situação Energia Ignição: {{atualSilo.situFonteIg}}</h3>
-  
-        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situaSilo"
+        <h3>Situação Temperatura: </h3>
+        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situTemperatura"
+          [animated]="true" [animationDuration]="1">
+        </mwl-gauge>
+        <h3>Situação Umidade: </h3>
+        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situUmidade"
+          [animated]="true" [animationDuration]="1">
+        </mwl-gauge>
+        <h3>Situação Pressão: </h3>
+        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situPressao"
+          [animated]="true" [animationDuration]="1">
+        </mwl-gauge>
+      </ion-col>
+      <ion-col>
+        <h3>Situação Poeira: </h3>
+        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situConcePo"
+          [animated]="true" [animationDuration]="1">
+        </mwl-gauge>
+        <h3>Situação Oxigênio: </h3>
+        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situConceOxi"
+          [animated]="true" [animationDuration]="1">
+        </mwl-gauge>
+        <h3>Situação Energia Ignição: </h3>
+        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situFonteIg"
           [animated]="true" [animationDuration]="1">
         </mwl-gauge>
       </ion-col>
