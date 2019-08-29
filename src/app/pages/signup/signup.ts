@@ -44,7 +44,7 @@ export class SignupPage {
       usuario: this.signup.usuario,
       senha: this.signup.senha,
       nomeSilo: this.signup.nomeSilo,
-      endSilo: 'http://' + this.signup.endSilo + ':5000/api/ambiente/',
+      endSilo: 'http://' + this.signup.endSilo + ':3000/api/ambiente/',
       tipoGrao: this.signup.tipoGrao
     }
     if (form.valid) {

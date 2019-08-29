@@ -4,20 +4,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': 'my-auth-token',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, GET '
-  })
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbDataService {
-  hostStorage: string = '192.168.16.254';
+  // hostStorage: string = '192.168.16.254';
+  hostStorage: string = '192.168.16.3';
   // hostStorage: string = '192.168.42.253';
   url_storage: string = 'http://' + this.hostStorage + ':5001/api/';
   // url_ambi: string = 'http://' + this.hostAmbiente + ':5000/api/ambiente/'
@@ -72,17 +65,24 @@ export class DbDataService {
   }
 
   async getAmbi(atual: Cliente): Promise<Silo> {
-    this.storage.get('cliente').then(async (cliente: Cliente) => {
-      // this.httpClient.post(this.url_ambi, cliente).subscribe(async () => {
-      await this.httpClient.get(atual.endSilo).subscribe(result => {
-        console.log(result);
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'my-auth-token',
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Access-Control-Allow-Methods': 'POST, GET '
+    //   })
+    // };
+    // this.httpClient.post(this.url_ambi, cliente).subscribe(async () => {
+    
+    await this.httpClient.get(this.url_storage + 'ambiente?endSilo=' + atual.endSilo).subscribe(result => {
+      console.log(result);
 
-        const response = (result as Silo)
-        this.silo = response;
-        this.storage.set('silo', this.silo);
-      });
-      // });
+      const response = (result as Silo)
+      this.silo = response;
+      this.storage.set('silo', this.silo);
     });
+    // });
     return this.storage.get('silo').then((value) => {
       return value;
     });
