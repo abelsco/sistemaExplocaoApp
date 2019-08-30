@@ -51,9 +51,13 @@ export class SchedulePage implements OnInit {
 
   ngOnInit() {
     this.user.getCliente().then(atual => {
-      this.loop = setInterval(() => {
-        this.updateAmb(atual);
-      }, 2500);
+      try {
+        this.loop = setInterval(() => {
+          this.updateAmb(atual);
+        }, 2500);
+      } catch (error) {
+        console.log(error);
+      }
     });
   }
 
