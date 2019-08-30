@@ -21,7 +21,7 @@ export class DbDataService {
     tipoGrao: '',
     endSilo: ''
   };
-  dateNow: Date = new Date();
+  dateNow: Date;
   parametro: Silo = {
   codSilo: 0,
   codCli: 0,
@@ -246,15 +246,16 @@ export class DbDataService {
     this.parametro.fonteIg = resposta.fonteIg;
     this.parametro.conceOxi = resposta.conceOxi;
     
-    this.dateNow.getDate();
+    this.dateNow = new Date();
+    this.parametro.dia = this.dateNow.toLocaleString();
      
-    console.log('toLocaleDateString '+this.dateNow.toLocaleDateString());
-    console.log('toLocaleString '+this.dateNow.toLocaleString());
-    console.log('toLocaleTimeString '+this.dateNow.toLocaleTimeString());
+    // console.log('toLocaleDateString '+this.dateNow.toLocaleDateString());
+    // console.log('toLocaleString '+this.dateNow.toLocaleString());
+    // console.log('toLocaleTimeString '+this.dateNow.toLocaleTimeString());
     
     // this.parametro.dia = Date.now();
     this.silo = this.parametro;
-    console.log(this.parametro);
+    // console.log(this.parametro);
     this.storage.set('silo', this.silo);
   }
 
