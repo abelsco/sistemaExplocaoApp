@@ -260,17 +260,15 @@ export class DbDataService {
   }
 
   async getAmbi(atual: Cliente): Promise<Silo> {
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'my-auth-token',
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Methods': 'POST, GET '
-    //   })
-    // };
-    // this.httpClient.post(this.url_ambi, cliente).subscribe(async () => {
-
-    await this.httpClient.get(this.url_storage + 'ambiente?endSilo=' + atual.endSilo).subscribe(async result => {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET'
+      })
+    };
+    await this.httpClient.get(this.url_storage + 'ambiente?endSilo=' + atual.endSilo,httpOptions).subscribe(async result => {
       const resposta = (result as Silo);
       await this.setSituacao(atual, resposta);
     });
