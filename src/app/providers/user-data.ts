@@ -11,19 +11,18 @@ import { DbDataService } from './db-data.service';
 export class UserData {
   _favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
-  SILO_IN = 'siloCorrente';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  cliente: Cliente = { 
+  private cliente: Cliente = {
     codCli: 0,
-    usuario: '', 
-    senha: '', 
-    nomeSilo: '', 
-    tipoGrao: '', 
+    usuario: '',
+    senha: '',
+    nomeSilo: '',
+    tipoGrao: '',
     endSilo: ''
   };
-  silos: Silo[] = [];
-  silo: Silo;
-  parametro: Silo;
+  private silos: Silo[] = [];
+  private silo: Silo;
+  private parametro: Silo;
 
   constructor(
     public events: Events,
@@ -31,6 +30,41 @@ export class UserData {
     private dbData: DbDataService,
     private os: Platform
   ) { }
+
+  zeraCliente() {
+    this.cliente = {
+      codCli: 0,
+      usuario: '',
+      senha: '',
+      nomeSilo: '',
+      tipoGrao: '',
+      endSilo: ''
+    }
+  }
+
+  async zeraSilo(): Promise<Silo> {
+    let atual: Silo = {
+      codSilo: 0,
+      codCli: 0,
+      dia: '',
+      temperatura: 0,
+      situTemperatura: 0,
+      umidade: 0,
+      situUmidade: 0,
+      pressao: 0,
+      situPressao: 0,
+      concePo: 0,
+      situConcePo: 0,
+      conceOxi: 0,
+      situConceOxi: 0,
+      fonteIg: 0,
+      situFonteIg: 0,
+      situaSilo: 0,
+    };
+    await this.storage.set('silo', atual);
+    const value = await this.getSilo();
+    return value;
+  }
 
   hasFavorite(sessionName: string): boolean {
     return (this._favorites.indexOf(sessionName) > -1);
@@ -48,14 +82,15 @@ export class UserData {
   }
 
   async login(usuario: string, senha: string): Promise<any> {
-    this.dbData.getLogin(usuario, senha);
-    const value = await this.storage.get('cliente');
-    const cliente = (value as Cliente);
-    if (cliente.codCli != 0) {
-      await this.storage.set(this.HAS_LOGGED_IN, true);
-      this.setCliente(cliente);
-      return this.events.publish('user:login');
-    }
+    await this.dbData.getLogin(usuario, senha).finally(() => {
+      this.getCliente().then(value => {
+        this.cliente = (value as Cliente);
+        if (this.cliente.codCli != 0) {
+          this.storage.set(this.HAS_LOGGED_IN, true);
+          return this.events.publish('user:login');
+        }
+      });
+    });
   }
 
   async signup(cliente: Cliente): Promise<any> {
@@ -71,13 +106,12 @@ export class UserData {
     this.events.publish('user:logout');
   }
 
-  setCliente(cliente: Cliente): Promise<any> {
-    return this.storage.set('cliente', cliente);
+  async setCliente(cliente: Cliente): Promise<any> {
+    await this.storage.set('cliente', cliente);
   }
 
   private async setSilo(silo: Silo): Promise<any> {
     this.silos.push(silo);
-    await this.storage.set(this.SILO_IN, true);
     this.storage.set('silo', silo);
     this.storage.set('silos', this.silos);
   }
@@ -91,7 +125,6 @@ export class UserData {
     const value = await this.storage.get('silo');
     return value;
   }
-
 
   async isLoggedIn(): Promise<boolean> {
     const value = await this.storage.get(this.HAS_LOGGED_IN);

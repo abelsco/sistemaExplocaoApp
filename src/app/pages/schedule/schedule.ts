@@ -56,7 +56,7 @@ export class SchedulePage implements OnInit {
           this.updateAmb(atual);
         }, 2500);
       } catch (error) {
-        console.log(error);
+        console.log('Error ' + error);
       }
     });
   }
@@ -132,8 +132,22 @@ export class SchedulePage implements OnInit {
   // }
 
   async updateAmb(atual: Cliente) {
-    this.db.getAmbi(atual).then((data) => {
-      this.atualSilo = data;
+    this.user.isLoggedIn().then(logado => {
+      if (logado) {
+        try {
+          this.db.getAmbi(atual).then((data) => {
+            this.atualSilo = data;
+          });
+
+        } catch (error) {
+          console.log("updateAmb:" + error);
+        }
+      }
+      else {
+        this.user.zeraSilo().then(data => {
+          this.atualSilo = data;
+        });
+      }
     });
   }
 }

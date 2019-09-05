@@ -3,17 +3,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class DbDataService {
-  hostStorage: string = '192.168.16.254';
-  // hostStorage: string = '192.168.16.4';
+  // hostStorage: string = '192.168.16.254';
+  private hostStorage: string = '192.168.16.4';
   // hostStorage: string = '192.168.42.253';
-  url_storage: string = 'http://' + this.hostStorage + ':5001/api/';
+  private url_storage: string = 'http://' + this.hostStorage + ':5001/api/';
   // url_ambi: string = 'http://' + this.hostAmbiente + ':5000/api/ambiente/'
-  cliente: Cliente = {
+  private cliente: Cliente = {
     codCli: 0,
     usuario: '',
     senha: '',
@@ -21,26 +20,26 @@ export class DbDataService {
     tipoGrao: '',
     endSilo: ''
   };
-  dateNow: Date;
-  parametro: Silo = {
-  codSilo: 0,
-  codCli: 0,
-  dia: '',
-  temperatura: 0,  
-  situTemperatura: 0,  
-  umidade: 0,
-  situUmidade: 0,
-  pressao: 0,
-  situPressao: 0,
-  concePo: 0,
-  situConcePo: 0,
-  conceOxi: 0,
-  situConceOxi: 0,
-  fonteIg: 0,
-  situFonteIg: 0,
-  situaSilo: 0
+  private dateNow: Date;
+  private parametro: Silo = {
+    codSilo: 0,
+    codCli: 0,
+    dia: '',
+    temperatura: 0,
+    situTemperatura: 0,
+    umidade: 0,
+    situUmidade: 0,
+    pressao: 0,
+    situPressao: 0,
+    concePo: 0,
+    situConcePo: 0,
+    conceOxi: 0,
+    situConceOxi: 0,
+    fonteIg: 0,
+    situFonteIg: 0,
+    situaSilo: 0
   };
-  silo: Silo;
+  private silo: Silo;
 
   constructor(
     private httpClient: HttpClient,
@@ -59,19 +58,58 @@ export class DbDataService {
       .subscribe(() => { });
   }
 
+  private zeraCliente() {
+    this.cliente = {
+      codCli: 0,
+      usuario: '',
+      senha: '',
+      nomeSilo: '',
+      tipoGrao: '',
+      endSilo: ''
+    }
+  }
+
+  private zeraSilo() {
+    this.silo = {
+      codSilo: 0,
+      codCli: 0,
+      dia: '',
+      temperatura: 0,
+      situTemperatura: 0,
+      umidade: 0,
+      situUmidade: 0,
+      pressao: 0,
+      situPressao: 0,
+      concePo: 0,
+      situConcePo: 0,
+      conceOxi: 0,
+      situConceOxi: 0,
+      fonteIg: 0,
+      situFonteIg: 0,
+      situaSilo: 0,
+    };
+    this.setStorage('silo', this.silo);
+  }
+
+  private async setStorage(parametro: string, valor: any, ) {
+
+    await this.storage.set(parametro, valor);
+  }
+
+  private async getStorage(parametro: string) {
+    const valor = await this.storage.get(parametro);
+    return valor;
+  }
+
   async getLogin(usuario: string, senha: string): Promise<any> {
-    await this.httpClient.get<Array<Cliente>>(this.url_storage + 'login?usuario=' + usuario + '&senha=' + senha).subscribe(result => {
-      this.cliente = {
-        codCli: 0,
-        usuario: '',
-        senha: '',
-        nomeSilo: '',
-        tipoGrao: '',
-        endSilo: ''
-      };
-      if (result.length == 1)
-        this.cliente = <Cliente>result.pop();
-      return this.storage.set('cliente', this.cliente).finally();
+    this.httpClient.get(this.url_storage + 'login?usuario=' + usuario + '&senha=' + senha).subscribe(result => {
+      // this.httpClient.get(this.url_storage + 'login?usuario=' + usuario + '&senha=' + senha).subscribe(result => {
+
+      if (result != null)
+        this.cliente = <Cliente>result;
+    });
+    return this.setStorage('cliente', this.cliente).finally(() => {
+      return;
     });
   }
 
@@ -228,7 +266,7 @@ export class DbDataService {
         break;
     }
     // console.log(qthis.parametro);
-    
+
     this.parametro.situTemperatura = (resposta.temperatura / this.parametro.temperatura) * 100;
     this.parametro.situConceOxi = (resposta.conceOxi / this.parametro.conceOxi) * 100;
     this.parametro.situPressao = (resposta.pressao / this.parametro.pressao) * 100;
@@ -245,37 +283,52 @@ export class DbDataService {
     this.parametro.concePo = resposta.concePo;
     this.parametro.fonteIg = resposta.fonteIg;
     this.parametro.conceOxi = resposta.conceOxi;
-    
+
     this.dateNow = new Date();
     this.parametro.dia = this.dateNow.toLocaleString();
-     
+
     // console.log('toLocaleDateString '+this.dateNow.toLocaleDateString());
     // console.log('toLocaleString '+this.dateNow.toLocaleString());
     // console.log('toLocaleTimeString '+this.dateNow.toLocaleTimeString());
-    
+
     // this.parametro.dia = Date.now();
     this.silo = this.parametro;
     // console.log(this.parametro);
-    this.storage.set('silo', this.silo);
+    this.setStorage('silo', this.silo);
+    if (this.silo.situaSilo >= 65) {
+      // this.postSilo(this.silo);
+    }
   }
 
-  async getAmbi(atual: Cliente): Promise<Silo> {
-    const httpOptions = {
+  async postSilo(atual: Silo) {
+    const header = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET'
+        'Access-Control-Allow-Methods': '*'
       })
     };
-    await this.httpClient.get(this.url_storage + 'ambiente?endSilo=' + atual.endSilo,httpOptions).subscribe(async result => {
-      const resposta = (result as Silo);
-      await this.setSituacao(atual, resposta);
-    });
-    // });
-    return this.storage.get('silo').then((value) => {
-      return value;
+    await this.httpClient.post(this.url_storage + 'silo', atual, header).subscribe(result => {
+      console.log(result);
     });
   }
 
+  async getAmbi(atual: Cliente): Promise<Silo> {
+    const header = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*'
+      })
+    };
+    await this.httpClient.get(this.url_storage + 'ambiente?endSilo=' + atual.endSilo).subscribe(async result => {
+      const resposta = (result as Silo);
+      await this.setSituacao(atual, resposta);
+    });
+    return this.getStorage('silo').then((value) => {
+      return value;
+    });
+  }
 }
