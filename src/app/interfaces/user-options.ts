@@ -13,8 +13,8 @@ export interface Silo {
   codSilo: number;
   codCli: number;
   dia: string;
-  temperatura: number;  
-  situTemperatura: number;  
+  temperatura: number;
+  situTemperatura: number;
   umidade: number;
   situUmidade: number;
   pressao: number;

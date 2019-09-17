@@ -36,7 +36,40 @@ export class SchedulePage implements OnInit {
     situConceOxi: 0,
     fonteIg: 0,
     situFonteIg: 0,
-    situaSilo: 0
+    situaSilo: 0,
+  };
+  gauge = {
+    dialStartAngle: 180,
+    dialEndAngle: 0,
+    min: 0,
+    max: 100,
+    animationDuration: 1,
+    animated: true,
+  };
+  classificacao = {
+    situTemperatura: '',
+    situUmidade: '',
+    situPressao: '',
+    situConcePo: '',
+    situConceOxi: '',
+    situFonteIg: '',
+    situaSilo: '',
+    gera: function (valor: number, tipo: string): string {
+      switch (tipo) {
+        case 'situaSilo':
+          if (valor > 85) {
+            return 'Crítica'
+          } else if (valor <= 85 && valor > 60) {
+            return 'Alerta'
+          }
+          else
+            return 'Normal'
+
+        default:
+          break;
+      }
+
+    }
   };
 
   constructor(
@@ -137,6 +170,7 @@ export class SchedulePage implements OnInit {
         try {
           this.db.getAmbi(atual).then((data) => {
             this.atualSilo = data;
+            this.classificacao.situaSilo = this.classificacao.gera(this.atualSilo.situaSilo, 'situaSilo');
           });
 
         } catch (error) {

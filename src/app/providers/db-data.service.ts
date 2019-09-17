@@ -7,9 +7,9 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root'
 })
 export class DbDataService {
-  // hostStorage: string = '192.168.16.254';
+  // private hostStorage: string = '192.168.16.254';
   private hostStorage: string = '192.168.16.4';
-  // hostStorage: string = '192.168.42.253';
+  // private hostStorage: string = '192.168.42.201';
   private url_storage: string = 'http://' + this.hostStorage + ':5001/api/';
   // url_ambi: string = 'http://' + this.hostAmbiente + ':5000/api/ambiente/'
   private cliente: Cliente = {
@@ -37,7 +37,7 @@ export class DbDataService {
     situConceOxi: 0,
     fonteIg: 0,
     situFonteIg: 0,
-    situaSilo: 0
+    situaSilo: 0,
   };
   private silo: Silo;
 
@@ -275,7 +275,6 @@ export class DbDataService {
     this.parametro.situConcePo = (resposta.concePo / this.parametro.concePo) * 100;
     this.parametro.situaSilo = (this.parametro.situConceOxi + this.parametro.situConcePo + this.parametro.situFonteIg + this.parametro.situPressao + this.parametro.situTemperatura + this.parametro.situUmidade) / 6;
 
-
     this.parametro.codCli = atual.codCli;
     this.parametro.temperatura = resposta.temperatura;
     this.parametro.pressao = resposta.pressao;
@@ -309,7 +308,7 @@ export class DbDataService {
         'Access-Control-Allow-Methods': '*'
       })
     };
-    await this.httpClient.post(this.url_storage + 'silo', atual, header).subscribe(result => {
+    this.httpClient.post(this.url_storage + 'silo', atual, header).subscribe(result => {
       console.log(result);
     });
   }
@@ -323,7 +322,7 @@ export class DbDataService {
         'Access-Control-Allow-Methods': '*'
       })
     };
-    await this.httpClient.get(this.url_storage + 'ambiente?endSilo=' + atual.endSilo).subscribe(async result => {
+    this.httpClient.get(this.url_storage + 'ambiente?endSilo=' + atual.endSilo, header).subscribe(async (result) => {
       const resposta = (result as Silo);
       await this.setSituacao(atual, resposta);
     });
