@@ -110,7 +110,9 @@
       "cordova-plugin-advanced-http": {
         "OKHTTP_VERSION": "3.10.0"
       },
-      "cordova-plugin-ionic-webview": {}
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      }
     }
   }
 }
