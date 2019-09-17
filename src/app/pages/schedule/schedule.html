@@ -31,9 +31,9 @@
     <ion-grid [fixed]='true' size-sm>
       <ion-row class="row-title">
         <h3>Situação do Silo: <br />{{classificacao.situaSilo}} </h3>
-        <mwl-gauge id="situaSilo" [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle"
+        <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle"
           [dialEndAngle]="gauge.dialEndAngle" [value]="this.atualSilo.situaSilo" [animated]="gauge.animated"
-          [animationDuration]="gauge.animationDuration" >
+          [animationDuration]="gauge.animationDuration" [color]="color" class="situaSilo">
         </mwl-gauge>
         <ion-col></ion-col>
         <ion-col>

@@ -16,3 +16,8 @@ mwl-gauge {
   display: block;
   padding: 10px;
 }
+
+mwl-gauge.situaSilo > .gauge > .dial {
+  stroke: #334455;
+  stroke-width: 10;
+}

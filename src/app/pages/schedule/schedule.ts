@@ -16,6 +16,7 @@ import { Silo, Cliente } from './../../interfaces/user-options';
 export class SchedulePage implements OnInit {
   // Gets a reference to the list element
   @ViewChild('scheduleList') scheduleList: IonList;
+  color: (value: number) => string;
 
   segment = 'monitoramento';
   situaSilo: string;
@@ -80,7 +81,19 @@ export class SchedulePage implements OnInit {
     public toastCtrl: ToastController,
     private user: UserData,
     private db: DbDataService
-  ) { }
+  ) {
+    this.color = function (value: number): string {
+      if (value < 20) {
+        return "#5ee432"; // green
+      } else if (value < 40) {
+        return "#fffa50"; // yellow
+      } else if (value < 60) {
+        return "#f7aa38"; // orange
+      } else {
+        return "#ef4655"; // red
+      }
+    }
+  }
 
   ngOnInit() {
     this.user.getCliente().then(atual => {
