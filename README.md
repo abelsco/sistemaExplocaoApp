@@ -1,13 +1,10 @@
-# Ionic Angular Conference Application
+# Sistema de Monitoramento de Silos (APP)
 
-This application is purely a kitchen-sink demo of the Ionic Framework and Angular.
-
-**There is not an actual Ionic Conference at this time.** This project is just to show off Ionic components in a real-world application. Please go through the steps in [CONTRIBUTING](https://github.com/ionic-team/ionic-conference-app/blob/master/.github/CONTRIBUTING.md) before submitting an issue.
+Esta interface foi desenvolvida utilizando como base o template [conference](https://github.com/ionic-team/ionic-conference-app) utilizando o Ionic Framework e Angular.
 
 
 ## Table of Contents
 - [Getting Started](#getting-started)
-- [Contributing](#contributing)
 - [App Preview](#app-preview)
 - [Deploying](#deploying)
   - [Progressive Web App](#progressive-web-app)
@@ -20,14 +17,11 @@ This application is purely a kitchen-sink demo of the Ionic Framework and Angula
 * [Download the installer](https://nodejs.org/) for Node.js 6 or greater.
 * Install the ionic CLI globally: `npm install -g ionic`
 * Clone this repository: `git clone https://github.com/ionic-team/ionic-conference-app.git`.
-* Run `npm install` from the project root.
-* Run `ionic serve` in a terminal from the project root.
+* Execute `npm install` from the project root.
+* Execute `ionic serve` in a terminal from the project root.
 * Profit. :tada:
 
 _Note: See [How to Prevent Permissions Errors](https://docs.npmjs.com/getting-started/fixing-npm-permissions) if you are running into issues when trying to install packages globally._
-
-## Contributing
-See [CONTRIBUTING.md](https://github.com/ionic-team/ionic-conference-app/blob/master/.github/CONTRIBUTING.md) :tada::+1:
 
 
 ## App Preview
@@ -51,14 +45,12 @@ All app preview screenshots were taken by running `ionic serve --lab` on a retin
 
 ### Progressive Web App
 
-1. Un-comment [these lines](https://github.com/ionic-team/ionic2-app-base/blob/master/src/index.html#L21)
-2. Run `npm run ionic:build --prod`
-3. Push the `www` folder to your hosting service
+1. Execute `npm run ng serve`
 
 ### Android
 
-1. Run `ionic cordova run android --prod`
+1. Execute `ionic cordova run android --prod`
 
 ### iOS
 
-1. Run `ionic cordova run ios --prod`
+1. Execute `ionic cordova run ios --prod`
