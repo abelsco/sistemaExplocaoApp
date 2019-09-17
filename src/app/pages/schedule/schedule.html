@@ -28,41 +28,50 @@
   </ion-list>
 
   <ion-list-header [hidden]="segment !== 'detalhe'">
-    <ion-row class="row-title">
-      <h3>Situação do Silo: </h3>
-      <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situaSilo"
-        [animated]="true" [animationDuration]="1">
-      </mwl-gauge>
-      <ion-col></ion-col>
-      <ion-col>
-        <h3>Situação Temperatura: </h3>
-        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situTemperatura"
-          [animated]="true" [animationDuration]="1">
+    <ion-grid [fixed]='true' size-sm>
+      <ion-row class="row-title">
+        <h3>Situação do Silo: <br />{{classificacao.situaSilo}} </h3>
+        <mwl-gauge id="situaSilo" [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle"
+          [dialEndAngle]="gauge.dialEndAngle" [value]="this.atualSilo.situaSilo" [animated]="gauge.animated"
+          [animationDuration]="gauge.animationDuration" >
         </mwl-gauge>
-        <h3>Situação Umidade: </h3>
-        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situUmidade"
-          [animated]="true" [animationDuration]="1">
-        </mwl-gauge>
-        <h3>Situação Pressão: </h3>
-        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situPressao"
-          [animated]="true" [animationDuration]="1">
-        </mwl-gauge>
-      </ion-col>
-      <ion-col>
-        <h3>Situação Poeira: </h3>
-        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situConcePo"
-          [animated]="true" [animationDuration]="1">
-        </mwl-gauge>
-        <h3>Situação Oxigênio: </h3>
-        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situConceOxi"
-          [animated]="true" [animationDuration]="1">
-        </mwl-gauge>
-        <h3>Situação Energia Ignição: </h3>
-        <mwl-gauge [max]="100" [dialStartAngle]="180" [dialEndAngle]="0" [value]="this.atualSilo.situFonteIg"
-          [animated]="true" [animationDuration]="1">
-        </mwl-gauge>
-      </ion-col>
-    </ion-row>
+        <ion-col></ion-col>
+        <ion-col>
+          <h3>Situação Temperatura: </h3>
+          <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+            [value]="this.atualSilo.situTemperatura" [animated]="gauge.animated"
+            [animationDuration]="gauge.animationDuration">
+          </mwl-gauge>
+          <h3>Situação Umidade: </h3>
+          <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+            [value]="this.atualSilo.situUmidade" [animated]="gauge.animated"
+            [animationDuration]="gauge.animationDuration">
+          </mwl-gauge>
+          <h3>Situação Pressão: </h3>
+          <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+            [value]="this.atualSilo.situPressao" [animated]="gauge.animated"
+            [animationDuration]="gauge.animationDuration">
+          </mwl-gauge>
+        </ion-col>
+        <ion-col>
+          <h3>Situação Poeira: </h3>
+          <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+            [value]="this.atualSilo.situConcePo" [animated]="gauge.animated"
+            [animationDuration]="gauge.animationDuration">
+          </mwl-gauge>
+          <h3>Situação Oxigênio: </h3>
+          <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+            [value]="this.atualSilo.situConceOxi" [animated]="gauge.animated"
+            [animationDuration]="gauge.animationDuration">
+          </mwl-gauge>
+          <h3>Situação Energia Ignição: </h3>
+          <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+            [value]="this.atualSilo.situFonteIg" [animated]="gauge.animated"
+            [animationDuration]="gauge.animationDuration">
+          </mwl-gauge>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-list-header>
 
   <!-- <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
