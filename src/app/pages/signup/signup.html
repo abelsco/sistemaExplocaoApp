@@ -38,12 +38,12 @@
       </ion-text>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Endereço do Silo</ion-label>
-        <ion-input [(ngModel)]="signup.endSilo" name="endSilo" type="text" #endSilo="ngModel" required>
+        <ion-label position="stacked" color="primary">Número de Série</ion-label>
+        <ion-input [(ngModel)]="signup.codSerie" name="codSerie" type="text" #codSerie="ngModel" required>
         </ion-input>
       </ion-item>
       <ion-text color="danger">
-        <p [hidden]="endSilo.valid || submitted == false" class="ion-padding-start">
+        <p [hidden]="codSerie.valid || submitted == false" class="ion-padding-start">
           Endereço do Silo é obrigatório
         </p>
       </ion-text>
