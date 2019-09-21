@@ -1,8 +1,9 @@
-import { Cliente, Silo } from './../interfaces/user-options';
+import { Cliente, Silo, Leitura, construtorCliente, construtorSilo, construtorLeitura } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
 import { Events, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { DbDataService } from './db-data.service';
+import { sha512_256 } from 'js-sha512';
 
 
 @Injectable({
@@ -12,57 +13,24 @@ export class UserData {
   _favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
-  private cliente: Cliente = {
-    codCli: 0,
-    usuario: '',
-    senha: '',
-    nomeSilo: '',
-    tipoGrao: '',
-    endSilo: ''
-  };
-  private silos: Silo[] = [];
+  private cliente: Cliente;
   private silo: Silo;
-  private parametro: Silo;
-
+  private leitura: Leitura;
   constructor(
     public events: Events,
     private storage: Storage,
     private dbData: DbDataService,
     private os: Platform
-  ) { }
-
-  zeraCliente() {
-    this.cliente = {
-      codCli: 0,
-      usuario: '',
-      senha: '',
-      nomeSilo: '',
-      tipoGrao: '',
-      endSilo: ''
-    }
+  ) {
+    this.cliente = construtorCliente();
+    this.silo = construtorSilo();
+    this.leitura = construtorLeitura();
   }
 
-  async zeraSilo(): Promise<Silo> {
-    let atual: Silo = {
-      codSilo: 0,
-      codCli: 0,
-      dia: '',
-      temperatura: 0,
-      situTemperatura: 0,
-      umidade: 0,
-      situUmidade: 0,
-      pressao: 0,
-      situPressao: 0,
-      concePo: 0,
-      situConcePo: 0,
-      conceOxi: 0,
-      situConceOxi: 0,
-      fonteIg: 0,
-      situFonteIg: 0,
-      situaSilo: 0,
-    };
-    await this.storage.set('silo', atual);
-    const value = await this.getSilo();
+  async zeraLeitura(): Promise<Leitura> {
+    let atual:Leitura = construtorLeitura();
+    await this.storage.set('leitura', atual);
+    const value = await this.getLeitura();
     return value;
   }
 
@@ -82,7 +50,7 @@ export class UserData {
   }
 
   async login(usuario: string, senha: string): Promise<any> {
-    await this.dbData.getLogin(usuario, senha).finally(() => {
+    await this.dbData.getLogin(usuario, sha512_256(senha)).finally(() => {
       this.getCliente().then(value => {
         this.cliente = (value as Cliente);
         if (this.cliente.codCli != 0) {
@@ -93,27 +61,29 @@ export class UserData {
     });
   }
 
-  async signup(cliente: Cliente): Promise<any> {
+  async signup(dados: any): Promise<any> {
     await this.storage.set(this.HAS_LOGGED_IN, true);
-    this.dbData.postCliente(cliente);
-    this.setCliente(cliente);
+    dados.senha = sha512_256(dados.senha);
+    this.dbData.postCliente(dados);
+    // this.cliente  = {
+    //   codCli: dados.codCli,
+    //   usuario: dados.usuario,
+    //   senha: dados.senha,
+    // }
+    // this.setCliente(this.cliente);
     return this.events.publish('user:signup');
   }
 
   async logout(): Promise<any> {
     await this.storage.remove(this.HAS_LOGGED_IN);
+    // Deslogar no banco 
     await this.storage.remove('cliente');
+    await this.storage.remove('silo');
     this.events.publish('user:logout');
   }
 
   async setCliente(cliente: Cliente): Promise<any> {
     await this.storage.set('cliente', cliente);
-  }
-
-  private async setSilo(silo: Silo): Promise<any> {
-    this.silos.push(silo);
-    this.storage.set('silo', silo);
-    this.storage.set('silos', this.silos);
   }
 
   async getCliente(): Promise<Cliente> {
@@ -123,6 +93,11 @@ export class UserData {
 
   async getSilo(): Promise<Silo> {
     const value = await this.storage.get('silo');
+    return value;
+  }
+
+  async getLeitura(): Promise<Leitura> {
+    const value = await this.storage.get('leitura');
     return value;
   }
 
