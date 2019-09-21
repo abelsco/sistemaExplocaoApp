@@ -57,6 +57,7 @@
     "cordova-sqlite-storage": "^3.2.1",
     "core-js": "^2.5.7",
     "fetch-client": "0.0.1",
+    "js-sha512": "^0.8.0",
     "rxjs": "6.5.2",
     "sw-toolbox": "3.6.0",
     "tslib": "^1.10.0",
