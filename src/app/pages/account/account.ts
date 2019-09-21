@@ -14,15 +14,13 @@ import { DbDataService } from '../../providers/db-data.service';
   styleUrls: ['./account.scss'],
 })
 export class AccountPage implements AfterViewInit {
-  cliente: Cliente = { 
+  cliente: any = {
     codCli: 0,
-    usuario: '', 
-    senha: '', 
-    nomeSilo: '', 
-    tipoGrao: '', 
-    endSilo: ''
+    usuario: '',
+    senha: '',
+    tipoGrao: '',
   };
-  
+
 
   constructor(
     public alertCtrl: AlertController,
@@ -42,36 +40,41 @@ export class AccountPage implements AfterViewInit {
   // Present an alert with the current username populated
   // clicking OK will update the username and display it
   // clicking Cancel will close the alert and do nothing
-  async changeEndSilo() {
-    const alert = await this.alertCtrl.create({
-      header: 'Mudar Endereço do Silo',
-      buttons: [
-        'Cancelar',
-        {
-          text: 'Ok',
-          handler: (data: any) => {
-            this.getCliente();
-            this.cliente.endSilo = data.endSilo;
-            this.dbData.postEndSilo(this.cliente);
-            this.userData.setCliente(this.cliente);
-          }
-        }
-      ],
-      inputs: [
-        {
-          type: 'text',
-          name: 'endSilo',
-          value: this.cliente.endSilo,
-          placeholder: 'Endereço do Silo'
-        }
-      ]
-    });
-    await alert.present();
-  }
+  // async changeEndSilo() {
+  //   const alert = await this.alertCtrl.create({
+  //     header: 'Mudar Endereço do Silo',
+  //     buttons: [
+  //       'Cancelar',
+  //       {
+  //         text: 'Ok',
+  //         handler: (data: any) => {
+  //           this.getCliente();
+  //           this.cliente.endSilo = data.endSilo;
+  //           this.dbData.postEndSilo(this.cliente);
+  //           this.userData.setCliente(this.cliente);
+  //         }
+  //       }
+  //     ],
+  //     inputs: [
+  //       {
+  //         type: 'text',
+  //         name: 'endSilo',
+  //         value: this.cliente.endSilo,
+  //         placeholder: 'Endereço do Silo'
+  //       }
+  //     ]
+  //   });
+  //   await alert.present();
+  // }
 
   async getCliente() {
-    await this.userData.getCliente().then((atual) => {
-      this.cliente = atual;      
+    await this.userData.getCliente().then(async (atualCliente) => {
+      this.cliente.codCli = atualCliente.codCli;
+      this.cliente.usuario = atualCliente.usuario;
+      this.cliente.senha = atualCliente.senha;
+      await this.userData.getSilo().then((atualSilo) => {
+        this.cliente.tipoGrao = atualSilo.tipoGrao;
+      });
     });
   }
 
