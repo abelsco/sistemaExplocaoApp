@@ -4,7 +4,7 @@ import { AlertController, IonList, LoadingController, ModalController, ToastCont
 
 import { UserData } from '../../providers/user-data';
 import { DbDataService } from '../../providers/db-data.service';
-import { Silo, Cliente } from './../../interfaces/user-options';
+import { Silo, Leitura, construtorLeitura } from './../../interfaces/user-options';
 
 
 @Component({
@@ -19,26 +19,9 @@ export class SchedulePage implements OnInit {
   color: (value: number) => string;
 
   segment = 'monitoramento';
-  situaSilo: string;
-  loop: NodeJS.Timeout;
-  atualSilo: Silo = {
-    codSilo: 0,
-    codCli: 0,
-    dia: '',
-    temperatura: 0,
-    situTemperatura: 0,
-    umidade: 0,
-    situUmidade: 0,
-    pressao: 0,
-    situPressao: 0,
-    concePo: 0,
-    situConcePo: 0,
-    conceOxi: 0,
-    situConceOxi: 0,
-    fonteIg: 0,
-    situFonteIg: 0,
-    situaSilo: 0,
-  };
+  private loop: NodeJS.Timeout;
+  atualSilo: Silo;
+  atualLeitura: Leitura;
   gauge = {
     dialStartAngle: 180,
     dialEndAngle: 0,
@@ -66,6 +49,15 @@ export class SchedulePage implements OnInit {
           else
             return 'Normal'
 
+        case 'situConceOxi':
+          if (valor <= 19) {
+            return 'Alerta: Nivel Oxigênio Baixo'
+          } else if (valor > 23) {
+            return 'Alerta: Nivel Oxigênio Alto'
+          }
+          else
+            return 'Nivel Seguro'
+
         default:
           break;
       }
@@ -82,6 +74,7 @@ export class SchedulePage implements OnInit {
     private user: UserData,
     private db: DbDataService
   ) {
+    this.atualLeitura = construtorLeitura();
     this.color = function (value: number): string {
       if (value < 20) {
         return "#5ee432"; // green
@@ -96,11 +89,11 @@ export class SchedulePage implements OnInit {
   }
 
   ngOnInit() {
-    this.user.getCliente().then(atual => {
+    this.user.getSilo().then(atual => {
       try {
         this.loop = setInterval(() => {
           this.updateAmb(atual);
-        }, 2500);
+        }, 3500);
       } catch (error) {
         console.log('Error ' + error);
       }
@@ -177,13 +170,14 @@ export class SchedulePage implements OnInit {
   //   fab.close();
   // }
 
-  async updateAmb(atual: Cliente) {
+  async updateAmb(atual: Silo) {
     this.user.isLoggedIn().then(logado => {
       if (logado) {
         try {
           this.db.getAmbi(atual).then((data) => {
-            this.atualSilo = data;
-            this.classificacao.situaSilo = this.classificacao.gera(this.atualSilo.situaSilo, 'situaSilo');
+            this.atualLeitura = data;
+            this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+            this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
           });
 
         } catch (error) {
@@ -191,8 +185,8 @@ export class SchedulePage implements OnInit {
         }
       }
       else {
-        this.user.zeraSilo().then(data => {
-          this.atualSilo = data;
+        this.user.zeraLeitura().then(data => {
+          this.atualLeitura = data;
         });
       }
     });
