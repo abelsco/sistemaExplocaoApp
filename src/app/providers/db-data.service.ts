@@ -1,6 +1,6 @@
 import { Cliente, Silo, Leitura, construtorCliente, construtorSilo, construtorLeitura } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 // import { sha512_256 } from "js-sha512";
 
@@ -107,7 +107,7 @@ export class DbDataService {
         };
       }
     });
-    return  await this.setStorage('silo', this.silo).finally(async() => {
+    return await this.setStorage('silo', this.silo).finally(async () => {
       return await this.setStorage('cliente', this.cliente).finally(() => {
 
       });
@@ -315,15 +315,8 @@ export class DbDataService {
   // }
 
   async getAmbi(atual: Silo): Promise<Leitura> {
-    const header = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'my-auth-token',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': '*',
-      })
-    };
-    this.httpClient.get(this.url_storage + 'ambiente?codSilo=' + atual.codSilo, header).subscribe(async (result) => {
+    // Lembrar de classificar melhor aqui
+    this.httpClient.get(this.url_storage + 'ambiente?codSilo=' + atual.codSilo).subscribe(async (result) => {
       const resposta = (result as any);
       await this.setSituacao(atual, resposta);
     });
