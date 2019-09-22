@@ -15,6 +15,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 registerLocaleData(localePt);
 @NgModule({
@@ -37,6 +38,7 @@ registerLocaleData(localePt);
     InAppBrowser,
     SplashScreen,
     StatusBar,
+    BackgroundMode,
     SQLite,
     SQLitePorter
   ],

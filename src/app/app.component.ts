@@ -6,10 +6,10 @@ import { Events, MenuController, Platform, ToastController } from '@ionic/angula
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-
 import { Storage } from '@ionic/storage';
 
 import { UserData } from './providers/user-data';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @Component({
   selector: 'app-root',
@@ -53,11 +53,13 @@ export class AppComponent implements OnInit {
     private userData: UserData,
     private swUpdate: SwUpdate,
     private toastCtrl: ToastController,
+    private backgroundMode: BackgroundMode,
   ) {
     this.initializeApp();
   }
 
   async ngOnInit() {
+    this.backgroundMode.enable();
     this.checkLoginStatus();
     this.listenForLoginEvents();
 
@@ -80,7 +82,9 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+      // this.statusBar.styleBlackTranslucent();
+      // this.statusBar.overlaysWebView(true);
+      this.statusBar.backgroundColorByHexString("#1a3225");
       this.splashScreen.hide();
     });
   }
