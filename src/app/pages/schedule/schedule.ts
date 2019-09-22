@@ -93,7 +93,7 @@ export class SchedulePage implements OnInit {
       try {
         this.loop = setInterval(() => {
           this.updateAmb(atual);
-        }, 3500);
+        }, 2000);
       } catch (error) {
         console.log('Error ' + error);
       }
@@ -175,9 +175,16 @@ export class SchedulePage implements OnInit {
       if (logado) {
         try {
           this.db.getAmbi(atual).then((data) => {
-            this.atualLeitura = data;
-            this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
-            this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+            // Lembrar de classificar melhor Aqui
+            if (data.codLeitura != 0) {
+              this.atualLeitura = data;
+              this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+              this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+            } else {
+              this.atualLeitura = construtorLeitura();
+              this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+              this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+            }
           });
 
         } catch (error) {
