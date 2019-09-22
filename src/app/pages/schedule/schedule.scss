@@ -1,8 +1,15 @@
 h3{
-  padding: 0 40px;
-  font-size: 17px;
-  line-height: 1.5;
-  color: #60646b;
+  padding: 1% 40px;
+  line-height: 100%;
+  font-size: medium;
+  color: var(--ion-color-dark-shade);
+}
+
+p{
+  padding: 0 0;
+  line-height: 100%;
+  font-size: medium;
+  color: var(--ion-color-dark-shade);
 }
 
 .row-title {
@@ -11,28 +18,42 @@ h3{
 }
 
 mwl-gauge {
-  width: 150px;
-  height: 150px;
-  display: block;
-  padding: 10px;
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  margin: auto;
+  text-align: center;
+  // padding: 5px;
 }
 
 .situaSilo {
   text-align: center;
   margin: auto;
   stroke-width: 10;
+  width: 130px;
+  height: 130px;
+  display: inline-block;
+  // padding: 5px;
 }
 
-div{
+.div-situaSilo{
   position: relative;
   width: 100%;
+  height: 5%;
+  text-align: center;
+}
+
+.div-detalhe{
+  position: static;
+  width: 100%;
+  width: 90%;
   text-align: center;
 }
 
 ion-col{
   position: relative;
-  // width: 100%;
-  height: 50%;
+  width: 50%;
+  height: 100%;
 }
 
 mwl-gauge.situaSilo > .gauge > .value {
