@@ -25,7 +25,6 @@
     "@angular/platform-browser-dynamic": "7.2.9",
     "@angular/pwa": "0.13.9",
     "@angular/router": "^7.2.9",
-    "@angular/service-worker": "~7.2.9",
     "@ionic-native/background-mode": "^5.14.0",
     "@ionic-native/core": "5.0.0-beta.15",
     "@ionic-native/http": "^5.11.0",
