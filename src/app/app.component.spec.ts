@@ -1,6 +1,7 @@
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
+// import { SwUpdate } from '@angular/service-worker';
 import { TestBed, async } from '@angular/core/testing';
 
 import { Events, MenuController, Platform } from '@ionic/angular';
@@ -18,6 +19,7 @@ describe('AppComponent', () => {
     statusBarSpy,
     splashScreenSpy,
     swUpdateSpy,
+    backGroundSpy,
     platformReadySpy,
     platformSpy,
     app,
@@ -30,7 +32,8 @@ describe('AppComponent', () => {
     userDataSpy = jasmine.createSpyObj('UserData', ['isLoggedIn', 'logout']);
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
     splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
-    swUpdateSpy = jasmine.createSpyObj('SwUpdate', ['available', 'activateUpdate']);
+    // swUpdateSpy = jasmine.createSpyObj('SwUpdate', ['available', 'activateUpdate']);
+    backGroundSpy = jasmine.createSpyObj('BackgroundMode', ['enable']);
     platformReadySpy = Promise.resolve();
     platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
 
@@ -45,7 +48,8 @@ describe('AppComponent', () => {
         { provide: UserData, useValue: userDataSpy },
         { provide: StatusBar, useValue: statusBarSpy },
         { provide: SplashScreen, useValue: splashScreenSpy },
-        { provide: SwUpdate, useValue: swUpdateSpy },
+        // { provide: SwUpdate, useValue: swUpdateSpy },
+        { provide: BackgroundMode, useValue: backGroundSpy },
         { provide: Platform, useValue: platformSpy }
       ]
     }).compileComponents();
