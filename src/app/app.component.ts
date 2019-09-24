@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Events, MenuController, Platform } from '@ionic/angular';
+import { Events, MenuController, Platform, ToastController } from '@ionic/angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
     }
   ];
   loggedIn = false;
+  private toast: HTMLIonToastElement;
 
   constructor(
     private events: Events,
@@ -50,6 +51,7 @@ export class AppComponent implements OnInit {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private storage: Storage,
+    private toastController: ToastController,
     private userData: UserData,
   ) {
     this.initializeApp();
@@ -70,9 +72,10 @@ export class AppComponent implements OnInit {
     });
   }
 
-  async checkLoginStatus() {
-    const loggedIn = await this.userData.isLoggedIn();
-    return this.updateLoggedInStatus(loggedIn);
+  checkLoginStatus() {
+    return this.userData.isLoggedIn().then(loggedIn => {
+      return this.updateLoggedInStatus(loggedIn);
+    });
   }
 
   updateLoggedInStatus(loggedIn: boolean) {
@@ -84,6 +87,7 @@ export class AppComponent implements OnInit {
   listenForLoginEvents() {
     this.events.subscribe('user:login', () => {
       this.updateLoggedInStatus(true);
+      return this.router.navigateByUrl('/app/tabs/schedule');
     });
 
     this.events.subscribe('user:signup', () => {
@@ -93,6 +97,49 @@ export class AppComponent implements OnInit {
     this.events.subscribe('user:logout', () => {
       this.updateLoggedInStatus(false);
     });
+
+    this.events.subscribe('user:login-faill', () => {
+      this.presentToast('user:delete');
+    });
+  }
+
+  async presentToast(opcao: string) {
+    switch (opcao) {
+      case 'user:login-faill':
+        this.toast = await this.toastController.create({
+          message: 'Usuário e/ou senha invalidos.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
+      case 'user:delete':
+        this.toast = await this.toastController.create({
+          header: 'Toast header',
+          message: 'Click to Close',
+          position: 'bottom',
+          color: 'tertiary',
+          buttons: [
+            {
+              side: 'start',
+              text: 'Favorite',
+              handler: () => {
+                console.log('Favorite clicked');
+              }
+            }, {
+              text: 'Done',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel clicked');
+              }
+            }
+          ]
+        });
+        this.toast.present();
+        break;
+
+      default:
+        break;
+    }
   }
 
   logout() {

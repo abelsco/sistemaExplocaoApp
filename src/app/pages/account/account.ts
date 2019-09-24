@@ -1,4 +1,3 @@
-import { Cliente } from './../../interfaces/user-options';
 import { AfterViewInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
 

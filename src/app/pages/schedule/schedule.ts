@@ -89,6 +89,7 @@ export class SchedulePage implements OnInit {
   }
 
   ngOnInit() {
+    this.atualLeitura = construtorLeitura();
     this.user.getSilo().then(atual => {
       try {
         this.loop = setInterval(() => {
@@ -170,16 +171,48 @@ export class SchedulePage implements OnInit {
   //   fab.close();
   // }
 
+  // async updateAmb(atual: Silo) {
+  //   this.user.isLoggedIn().then(logado => {
+  //     if (logado) {
+  //       try {
+  //         this.user.getAmbi(atual).then((data) => {
+  //           // Lembrar de classificar melhor Aqui            
+  //           if (data.codLeitura) {
+  //             this.atualLeitura = data;
+  //             this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+  //             this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+
+  //           } else {
+  //             this.atualLeitura = construtorLeitura();
+  //             this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+  //             this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+  //           }
+  //         });
+
+  //       } catch (error) {
+  //         console.log("updateAmb:" + error);
+  //       }
+  //     }
+  //     else {
+  //       this.user.zeraLeitura().then(data => {
+  //         this.atualLeitura = data;
+  //       });
+  //     }
+  //   });
+  // }
+
   async updateAmb(atual: Silo) {
     this.user.isLoggedIn().then(logado => {
       if (logado) {
         try {
-          this.db.getAmbi(atual).then((data) => {
-            // Lembrar de classificar melhor Aqui
-            if (data.codLeitura != 0) {
+          this.user.getAmbi(atual);
+          this.user.getLeitura().then(data => {
+            // Lembrar de classificar melhor Aqui            
+            if (data.codLeitura) {
               this.atualLeitura = data;
               this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
               this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+
             } else {
               this.atualLeitura = construtorLeitura();
               this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
