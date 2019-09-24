@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { UserData } from '../../providers/user-data';
 
 import { Cliente, construtorCliente } from '../../interfaces/user-options';
-import { sha512 } from 'js-sha512';
 
 
 
@@ -15,9 +14,9 @@ import { sha512 } from 'js-sha512';
   styleUrls: ['./login.scss'],
 })
 export class LoginPage {
-  login: Cliente = { 
+  login: Cliente = {
     codCli: 0,
-    usuario: '', 
+    usuario: '',
     senha: '',
   };
   submitted = false;
@@ -25,21 +24,30 @@ export class LoginPage {
   constructor(
     public userData: UserData,
     public router: Router
-  ) { }
-
-  async onLogin(form: NgForm) {
-    this.submitted = true;
-    if (form.valid) {
-      await this.userData.login(this.login.usuario, this.login.senha);
-      this.router.navigateByUrl('/app/tabs/schedule');
-    }
+  ) {
+    this.login = construtorCliente();
   }
 
+  ngOnInit() {
+    // this.login = construtorCliente();
+  }
+
+  ionViewDidLeave() {    
+    this.login = construtorCliente();
+  }
+
+  onLogin(form: NgForm) {
+    this.submitted = true;
+    if (form.valid) {
+      this.userData.login(this.login.usuario, this.login.senha);
+    }
+  }
+  
   onSignup() {
     this.router.navigateByUrl('/signup');
   }
 
   ngOnDestroy() {
-    this.login = construtorCliente();
+    // this.login = construtorCliente();
   }
 }
