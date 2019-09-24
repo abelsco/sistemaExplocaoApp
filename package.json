@@ -7,6 +7,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "remote": "ng serve --host 192.168.16.4 --disable-host-check",
     "build": "ng build",
     "test": "ng test --watch=false",
     "lint": "ng lint"

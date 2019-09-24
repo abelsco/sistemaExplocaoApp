@@ -50,7 +50,7 @@ export interface Leitura {
   situaSilo: number;
 }
 export function construtorLeitura() {
-  let silo: Leitura = {
+  let leitura: Leitura = {
     codLeitura: 0,
     codSilo: 0,
     temperatura: 0,
@@ -67,7 +67,7 @@ export function construtorLeitura() {
     situFonteIg: 0,
     situaSilo: 0,
   };
-  return silo;
+  return leitura;
 }
 
 
