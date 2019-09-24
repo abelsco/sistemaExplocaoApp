@@ -1,6 +1,6 @@
 {
-  "name": "Sistema Monitoramento",
-  "short_name": "Sistema Monitoramento",
+  "name": "MeuSilo",
+  "short_name": "MeuSilo",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [
@@ -10,6 +10,6 @@
       "type": "image/png"
     }
   ],
-  "background_color": "#387ef5",
-  "theme_color": "#387ef5"
+  "background_color": "#1a3225",
+  "theme_color": "#1a3225"
 }
