@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { UserData } from '../../providers/user-data';
 
-// import { Cliente } from '../../interfaces/user-options';
-// import { sha512 } from 'js-sha512';
 
 @Component({
   selector: 'page-signup',
@@ -25,12 +22,12 @@ export class SignupPage {
   constructor(
     public router: Router,
     public userData: UserData
-  ) { }
+  ) {  }
 
   onSignup(form: NgForm) {
     this.submitted = true;
     // console.log(sha512(this.signup.senha));
-    
+
     if (form.valid) {
       this.userData.signup(this.signup);
       this.router.navigateByUrl('/app/tabs/schedule');
