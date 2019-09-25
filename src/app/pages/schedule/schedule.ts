@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, IonList, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, IonList, LoadingController, ModalController, ToastController, IonSlides } from '@ionic/angular';
 import { UserData } from '../../providers/user-data';
 import { Silo, Leitura, construtorLeitura } from './../../interfaces/user-options';
 
@@ -13,10 +13,10 @@ import { Silo, Leitura, construtorLeitura } from './../../interfaces/user-option
 
 export class SchedulePage implements OnInit {
   // Gets a reference to the list element
-  @ViewChild('scheduleList') scheduleList: IonList;
+  @ViewChild('slides') slider: IonSlides;
   color: (value: number) => string;
 
-  segment = 'monitoramento';
+  segment = 0;
   private loop: NodeJS.Timeout;
   atualSilo: Silo;
   atualLeitura: Leitura;
@@ -96,6 +96,14 @@ export class SchedulePage implements OnInit {
         console.log('Error ' + error);
       }
     });
+  }
+
+  async segmentChanged() {
+    await this.slider.slideTo(this.segment);
+  }
+
+  async slideChanged() {
+    this.segment = await this.slider.getActiveIndex();
   }
 
   ngOnDestroy() {

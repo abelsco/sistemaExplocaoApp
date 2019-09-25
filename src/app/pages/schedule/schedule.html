@@ -3,33 +3,32 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-segment [(ngModel)]="segment">
-      <ion-segment-button value="monitoramento">
+    <ion-segment (ionChange)="segmentChanged()" [(ngModel)]="segment">
+      <ion-segment-button value="0">
         Monitoramento
       </ion-segment-button>
-      <ion-segment-button value="detalhe">
+      <ion-segment-button value="1">
         Detalhes
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-list #scheduleList [hidden]="segment !== 'monitoramento'">
-    <ion-row class="row-title">
-      <ion-col>
-        <h3>Temperatura: {{atualLeitura.temperatura}} ºC</h3>
-        <h3>Umidade: {{atualLeitura.umidade}} %</h3>
-        <h3>Pressão: {{atualLeitura.pressao}} kg/m²</h3>
-        <h3>Concentração de Pó: {{atualLeitura.concePo}} g/m³</h3>
-        <h3>Fonte de ignição: {{atualLeitura.fonteIg}} J</h3>
-        <h3>Oxigênio: {{atualLeitura.conceOxi}} %</h3>
-      </ion-col>
-    </ion-row>
-  </ion-list>
+  <ion-slides #slides (ionSlideDidChange)="slideChanged()">
+    <ion-slide class="slide">
+        <ion-col>
+          <h3>Temperatura: {{atualLeitura.temperatura}} ºC</h3>
+          <h3>Umidade: {{atualLeitura.umidade}} %</h3>
+          <h3>Pressão: {{atualLeitura.pressao}} kg/m²</h3>
+          <h3>Concentração de Pó: {{atualLeitura.concePo}} g/m³</h3>
+          <h3>Fonte de ignição: {{atualLeitura.fonteIg}} J</h3>
+          <h3>Oxigênio: {{atualLeitura.conceOxi}} %</h3>
+        </ion-col>
 
-  <ion-list-header [hidden]="segment !== 'detalhe'">
-    <ion-grid [fixed]='true' size-sm>
-      <ion-row class="row-title">
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid fixed>
         <div class="div-situaSilo">
           <h3>Situação do Silo: </h3>
           <p>{{classificacao.situaSilo}}</p>
@@ -89,9 +88,9 @@
             </div>
           </ion-col>
         </div>
-      </ion-row>
-    </ion-grid>
-  </ion-list-header>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
 
   <!-- <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
     <ion-fab-button><ion-icon name="share"></ion-icon></ion-fab-button>
