@@ -136,6 +136,8 @@ export class SchedulePage implements OnInit {
       else {
         this.user.zeraLeitura().then(data => {
           this.atualLeitura = data;
+          this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+          this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situaSilo');
         });
       }
     });
