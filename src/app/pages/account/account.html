@@ -11,13 +11,16 @@
   <div *ngIf="cliente" class="ion-padding-top ion-text-center">
     <img src="assets/img/icon-vec.png" alt="avatar">
     <h2>Bem vindo(a) {{cliente.usuario}}</h2>
-      <h2>Tipo do grão armazenado: {{cliente.tipoGrao}}</h2>
+    <h2>Tipo de grão armazenado: {{cliente.tipoGrao}}</h2>
     <ion-list inset>
-      <!-- <ion-item (click)="changeTipoGrao()">Mudar Tipo Grão</ion-item> -->
-      <!-- <ion-item (click)="changeEndSilo()">Mudar Endereço do Silo</ion-item> -->
+      <ion-item (click)="changeTipoGrao()">Mudar Tipo Grão</ion-item>
+      <ion-item (click)="changeNomeSilo()">Mudar Nome do Silo</ion-item>
       <!-- <ion-item (click)="changeSenha()">Mudar Senha</ion-item> -->
-      <!-- <ion-item (click)="support()">Suporte</ion-item> -->
       <ion-item (click)="logout()">Logout</ion-item>
+    </ion-list>
+    <ion-label>Definição conta</ion-label>
+    <ion-list inset>
+      <ion-item (click)="support()">Deletar conta</ion-item>
     </ion-list>
   </div>
 </ion-content>

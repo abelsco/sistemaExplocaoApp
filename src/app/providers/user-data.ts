@@ -1,6 +1,6 @@
 import { Cliente, Silo, Leitura, construtorCliente, construtorSilo, construtorLeitura } from './../interfaces/user-options';
 import { Injectable } from '@angular/core';
-import { Events, Platform } from '@ionic/angular';
+import { Events } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { DbDataService } from './db-data.service';
 import { sha512_256 } from 'js-sha512';
@@ -20,7 +20,6 @@ export class UserData {
     public events: Events,
     private storage: Storage,
     private dbData: DbDataService,
-    private os: Platform
   ) {
     this.cliente = construtorCliente();
     this.silo = construtorSilo();
@@ -49,34 +48,46 @@ export class UserData {
     }
   }
 
-  // async login(usuario: string, senha: string): Promise<any> {
-  //   this.dbData.getLogin(usuario, sha512_256(senha)).then(async value => {
-  //     // console.log('value');
-  //     // console.log(value);
+  suporte(dados: any, opcao: string) {
+    switch (opcao) {
+      case 'tipoGrao':
+        return this.dbData.postTipoGrao(dados).subscribe((resposta) => {
+          if (resposta.status == 'sucesso') {
+            this.events.publish('user:update');
+          } else {
+            this.events.publish('user:update-faill');
+          }
+        });
+      case 'nomeSilo':
+        return this.dbData.postNomeSilo(dados).subscribe((resposta) => {
+          if (resposta.status == 'sucesso') {
+            this.events.publish('user:update');
+          } else {
+            this.events.publish('user:update-faill');
+          }
+        });
+      case 'deletar':
+        dados.senha = sha512_256(dados.senha);
+        return this.dbData.postDeletaCliente(dados).subscribe((resposta) => {
+          console.log(resposta);
 
-  //     if (value) {
-  //       if (value.codCli != undefined) {
-  //         this.cliente = value;
-  //       } else {
-  //         this.cliente = construtorCliente();
-  //       }
-  //     }
-  //     else {
-  //       this.cliente = construtorCliente();
-  //     }
+          if (resposta.status == 'sucesso') {
+            this.events.publish('user:del');
+            return this.logout();
+          }
+          else {
+            this.events.publish('user:del-faill');
+          }
+        });
 
-  //     // console.log('this.cliente');
-  //     // console.log(this.cliente);
-
-  //     if (this.cliente.codCli != 0) {
-  //       this.storage.set(this.HAS_LOGGED_IN, true);
-  //       return this.events.publish('user:login');
-  //     }
-  //   });
-  // }
+      default:
+        break;
+    }
+  }
 
   login(usuario: string, senha: string) {
-    return this.dbData.getLogin(usuario, sha512_256(senha)).subscribe((data) => {
+    senha = sha512_256(senha);
+    return this.dbData.getLogin(usuario, senha).subscribe((data) => {
       if (data.codCli) {
         // console.log(data);
         this.silo = data;
@@ -97,6 +108,7 @@ export class UserData {
 
   signup(dados: any) {
     dados.senha = sha512_256(dados.senha);
+    dados.codSerie = sha512_256(dados.codSerie);
     return this.dbData.postCliente(dados).subscribe(resposta => {
       this.storage.set(this.HAS_LOGGED_IN, true);
       this.silo = {
@@ -122,7 +134,7 @@ export class UserData {
     // Deslogar no banco 
     await this.storage.remove('cliente');
     await this.storage.remove('silo');
-    this.events.publish('user:logout');
+    return this.events.publish('user:logout');
   }
 
   async setCliente(cliente: Cliente): Promise<any> {
