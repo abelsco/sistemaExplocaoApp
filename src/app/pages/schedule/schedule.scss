@@ -1,4 +1,4 @@
-h3{
+h3 {
   padding: 1% 40px;
   line-height: 100%;
   font-size: medium;
@@ -6,14 +6,14 @@ h3{
   font-weight: bold;
 }
 
-p{
+p {
   padding: 1% 3%;
   line-height: 100%;
   font-size: medium;
   color: var(--ion-color-dark-shade);
 }
 
-.col-detalhe{
+.col-detalhe {
   margin: auto;
 }
 
@@ -38,21 +38,21 @@ mwl-gauge {
   // padding: 5px;
 }
 
-.div-situaSilo{
-  margin: 3% 5px 10px 5px;
+.div-situaSilo {
+  margin: 2% 5px 10px 5px;
   position: relative;
-  border: 2px  solid var(--ion-color-step-50);
+  border: 2px solid var(--ion-color-step-50);
   border-radius: 10px;
 }
 
-.div-detalhe{
+.div-detalhe {
   margin: 5px 5px 10px 5px;
   position: relative;
-  border: 2px  solid var(--ion-color-step-50);
+  border: 2px solid var(--ion-color-step-50);
   border-radius: 10px;
 }
 
-ion-col{
+ion-col {
   width: 50%;
   height: 100%;
 }
