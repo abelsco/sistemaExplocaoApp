@@ -55,7 +55,7 @@ export class UserData {
           if (resposta.status == 'sucesso') {
             this.events.publish('user:update');
           } else {
-            this.events.publish('user:update-faill');
+            this.events.publish('user:update-falha');
           }
         });
       case 'nomeSilo':
@@ -63,20 +63,34 @@ export class UserData {
           if (resposta.status == 'sucesso') {
             this.events.publish('user:update');
           } else {
-            this.events.publish('user:update-faill');
+            this.events.publish('user:update-falha');
           }
         });
+      case 'senha':
+        if (dados.senhaNova == dados.confirma) {
+          dados.senha = sha512_256(dados.senha);
+          dados.senhaNova = sha512_256(dados.senhaNova);
+          return this.dbData.postSenhaCliente(dados).subscribe((resposta) => {
+            if (resposta.status == 'sucesso') {
+              this.events.publish('user:update');
+            } else {
+              this.events.publish('user:update-falha');
+            }
+          });
+
+        } else { return this.events.publish('user:senha-falha'); }
+
       case 'deletar':
         dados.senha = sha512_256(dados.senha);
         return this.dbData.postDeletaCliente(dados).subscribe((resposta) => {
-          console.log(resposta);
+          // console.log(resposta);
 
           if (resposta.status == 'sucesso') {
             this.events.publish('user:del');
             return this.logout();
           }
           else {
-            this.events.publish('user:del-faill');
+            this.events.publish('user:del-falha');
           }
         });
 
@@ -102,7 +116,7 @@ export class UserData {
         this.events.publish('user:login');
       }
       else
-        this.events.publish('user:login-faill');
+        this.events.publish('user:login-falha');
     });
   }
 

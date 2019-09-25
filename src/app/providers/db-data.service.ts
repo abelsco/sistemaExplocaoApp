@@ -19,6 +19,10 @@ export class DbDataService {
     return this.httpClient.post<Silo>(this.url_storage + 'cliente/', dados);
   }
 
+  postSenhaCliente(dados: any) {
+    return this.httpClient.post<any>(this.url_storage + 'cliente/senha/', dados);
+  }
+
   postNomeSilo(dados: any) {
     return this.httpClient.post<any>(this.url_storage + 'cliente/nomesilo/', dados);
   }
