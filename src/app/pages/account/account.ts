@@ -1,11 +1,7 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { AlertController } from '@ionic/angular';
-
 import { UserData } from '../../providers/user-data';
-import { DbDataService } from '../../providers/db-data.service';
-
 
 @Component({
   selector: 'page-account',
@@ -15,9 +11,11 @@ import { DbDataService } from '../../providers/db-data.service';
 export class AccountPage implements AfterViewInit {
   cliente: any = {
     codCli: 0,
+    codSilo: 0,
     usuario: '',
     senha: '',
     tipoGrao: '',
+    nomeSilo: '',
   };
 
 
@@ -25,46 +23,168 @@ export class AccountPage implements AfterViewInit {
     public alertCtrl: AlertController,
     public router: Router,
     private userData: UserData,
-    private dbData: DbDataService
   ) { }
 
   ngAfterViewInit() {
     this.getCliente();
   }
 
-  updatePicture() {
-    console.log('Clicked to update picture');
-  }
-
   // Present an alert with the current username populated
   // clicking OK will update the username and display it
-  // clicking Cancel will close the alert and do nothing
-  // async changeEndSilo() {
-  //   const alert = await this.alertCtrl.create({
-  //     header: 'Mudar Endereço do Silo',
-  //     buttons: [
-  //       'Cancelar',
-  //       {
-  //         text: 'Ok',
-  //         handler: (data: any) => {
-  //           this.getCliente();
-  //           this.cliente.endSilo = data.endSilo;
-  //           this.dbData.postEndSilo(this.cliente);
-  //           this.userData.setCliente(this.cliente);
-  //         }
-  //       }
-  //     ],
-  //     inputs: [
-  //       {
-  //         type: 'text',
-  //         name: 'endSilo',
-  //         value: this.cliente.endSilo,
-  //         placeholder: 'Endereço do Silo'
-  //       }
-  //     ]
-  //   });
-  //   await alert.present();
-  // }
+  // clicking Cancelar will close the alert and do nothing
+  async changeNomeSilo() {
+    const alert = await this.alertCtrl.create({
+      header: 'Nome do Silo',
+      buttons: [
+        'Cancelar',
+        {
+          text: 'Confirmar',
+          handler: (data: any) => {
+            console.log(data);
+            
+            this.getCliente();
+            this.cliente.nomeSilo = data.nomeSilo;
+            this.userData.suporte(this.cliente, 'nomeSilo');
+            // console.log(this.cliente);
+            
+          }
+        }
+      ],
+      inputs: [
+        {
+          type: 'text',
+          name: 'nomeSilo',
+          placeholder: 'Nome'
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async changeTipoGrao() {    
+    const alert = await this.alertCtrl.create({
+      header: 'Tipo de Grão',
+      inputs: [
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Açúcar em pó',
+          value: 'Açúcar em pó',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Alho desidratado',
+          value: 'Alho desidratado',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Arroz',
+          value: 'Arroz',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Semente de arroz(casca)',
+          value: 'Semente de arroz(casca)',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Casca de arroz',
+          value: 'Casca de arroz',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Proteína de soja',
+          value: 'Proteína de soja',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Farinha de soja',
+          value: 'Farinha de soja',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Trigo bruto',
+          value: 'Trigo bruto',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Farinha de trigo',
+          value: 'Farinha de trigo',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Trigo Cereal',
+          value: 'Trigo Cereal',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Palha de trigo',
+          value: 'Palha de trigo',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Polvilho de trigo',
+          value: 'Polvilho de trigo',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Milho',
+          value: 'Milho',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Casca de milho cru',
+          value: 'Casca de milho cru',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Polvilho de milho',
+          value: 'Polvilho de milho',
+        },
+        {
+          name: 'tipoGrao',
+          type: 'radio',
+          label: 'Semente de milho',
+          value: 'Semente de milho',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancelar');
+          }
+        }, {
+          text: 'Confirmar',
+          handler: (data: any) => {
+            // console.log(data);
+            
+            // this.getCliente();
+            this.cliente.tipoGrao = data;
+            this.userData.suporte(this.cliente, 'tipoGrao');
+            // console.log(this.cliente);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
   async getCliente() {
     await this.userData.getCliente().then(async (atualCliente) => {
@@ -73,12 +193,9 @@ export class AccountPage implements AfterViewInit {
       this.cliente.senha = atualCliente.senha;
       await this.userData.getSilo().then((atualSilo) => {
         this.cliente.tipoGrao = atualSilo.tipoGrao;
+        this.cliente.codSilo = atualSilo.codSilo;
       });
     });
-  }
-
-  changePassword() {
-    console.log('Clicked to change password');
   }
 
   logout() {
@@ -87,6 +204,39 @@ export class AccountPage implements AfterViewInit {
   }
 
   support() {
-    this.router.navigateByUrl('/support');
+    this.deletarConta();
+  }
+
+  async deletarConta(){
+    const alert = await this.alertCtrl.create({
+      header: 'Deletar conta',
+      message: 'Para confirmar digite sua senha<br />Todos os seus dados serão <strong>perdidos</strong>!!!',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancelar: blah');
+          }
+        }, {
+          text: 'Sim',
+          handler: (dado: any) => {
+            console.log(dado);
+            
+            this.cliente.senha = dado.senha;
+            this.userData.suporte(this.cliente, 'deletar');             
+          }
+        }
+      ],
+      inputs: [
+        {
+          type: 'password',
+          name: 'senha',
+          placeholder: 'Confirme sua senha'
+        }
+      ]
+    });
+    await alert.present();
   }
 }

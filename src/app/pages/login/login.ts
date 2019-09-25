@@ -29,7 +29,7 @@ export class LoginPage {
   }
 
   ngOnInit() {
-    // this.login = construtorCliente();
+    this.login = construtorCliente();
   }
 
   ionViewDidLeave() {    

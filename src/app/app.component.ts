@@ -96,10 +96,27 @@ export class AppComponent implements OnInit {
 
     this.events.subscribe('user:logout', () => {
       this.updateLoggedInStatus(false);
+      return this.router.navigateByUrl('/app/tabs/schedule');
     });
 
     this.events.subscribe('user:login-faill', () => {
-      this.presentToast('user:delete');
+      this.presentToast('user:login-faill');
+    });
+
+    this.events.subscribe('user:del', () => {
+      this.presentToast('user:del');
+    });
+
+    this.events.subscribe('user:del-faill', () => {
+      this.presentToast('user:del-faill');
+    });
+
+    this.events.subscribe('user:update', () => {
+      this.presentToast('user:update');
+    });
+
+    this.events.subscribe('user:update-faill', () => {
+      this.presentToast('user:update-faill');
     });
   }
 
@@ -108,6 +125,34 @@ export class AppComponent implements OnInit {
       case 'user:login-faill':
         this.toast = await this.toastController.create({
           message: 'Usuário e/ou senha invalidos.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
+      case 'user:del':
+        this.toast = await this.toastController.create({
+          message: 'Cliente excluído.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
+      case 'user:del-faill':
+        this.toast = await this.toastController.create({
+          message: 'Senha incorreta.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
+      case 'user:update':
+        this.toast = await this.toastController.create({
+          message: 'Sucesso.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
+      case 'user:update-faill':
+        this.toast = await this.toastController.create({
+          message: 'Falhou tente novamente.',
           duration: 2000
         });
         this.toast.present();
