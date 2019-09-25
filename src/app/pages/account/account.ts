@@ -40,13 +40,13 @@ export class AccountPage implements AfterViewInit {
         {
           text: 'Confirmar',
           handler: (data: any) => {
-            console.log(data);
-            
+            // console.log(data);
+
             this.getCliente();
             this.cliente.nomeSilo = data.nomeSilo;
             this.userData.suporte(this.cliente, 'nomeSilo');
             // console.log(this.cliente);
-            
+
           }
         }
       ],
@@ -61,7 +61,52 @@ export class AccountPage implements AfterViewInit {
     await alert.present();
   }
 
-  async changeTipoGrao() {    
+  async changeSenha() {
+    const alert = await this.alertCtrl.create({
+      header: 'Mudar a senha',
+      buttons: [
+        'Cancelar',
+        {
+          text: 'Confirmar',
+          handler: (data: any) => {
+            // console.log(data);
+            
+            let dados: any = {
+              codCli: this.cliente.codCli,
+              usuario: this.cliente.usuario,
+              senha: data.senhaAntiga,
+              senhaNova: data.senhaNova,
+              confirma: data.confirma,              
+            }
+            this.userData.suporte(dados, 'senha');
+            // console.log(this.cliente);
+
+
+          }
+        }
+      ],
+      inputs: [
+        {
+          type: 'password',
+          name: 'senhaAntiga',
+          placeholder: 'Senha antiga'
+        },
+        {
+          type: 'password',
+          name: 'senhaNova',
+          placeholder: 'Nova senha'
+        },
+        {
+          type: 'password',
+          name: 'confirma',
+          placeholder: 'Repita a nova senha'
+        },
+      ]
+    });
+    await alert.present();
+  }
+
+  async changeTipoGrao() {
     const alert = await this.alertCtrl.create({
       header: 'Tipo de Grão',
       inputs: [
@@ -174,7 +219,7 @@ export class AccountPage implements AfterViewInit {
           text: 'Confirmar',
           handler: (data: any) => {
             // console.log(data);
-            
+
             // this.getCliente();
             this.cliente.tipoGrao = data;
             this.userData.suporte(this.cliente, 'tipoGrao');
@@ -207,7 +252,7 @@ export class AccountPage implements AfterViewInit {
     this.deletarConta();
   }
 
-  async deletarConta(){
+  async deletarConta() {
     const alert = await this.alertCtrl.create({
       header: 'Deletar conta',
       message: 'Para confirmar digite sua senha<br />Todos os seus dados serão <strong>perdidos</strong>!!!',
@@ -223,9 +268,9 @@ export class AccountPage implements AfterViewInit {
           text: 'Sim',
           handler: (dado: any) => {
             console.log(dado);
-            
+
             this.cliente.senha = dado.senha;
-            this.userData.suporte(this.cliente, 'deletar');             
+            this.userData.suporte(this.cliente, 'deletar');
           }
         }
       ],

@@ -99,30 +99,34 @@ export class AppComponent implements OnInit {
       return this.router.navigateByUrl('/app/tabs/schedule');
     });
 
-    this.events.subscribe('user:login-faill', () => {
-      this.presentToast('user:login-faill');
+    this.events.subscribe('user:login-falha', () => {
+      this.presentToast('user:login-falha');
     });
 
     this.events.subscribe('user:del', () => {
       this.presentToast('user:del');
     });
 
-    this.events.subscribe('user:del-faill', () => {
-      this.presentToast('user:del-faill');
+    this.events.subscribe('user:del-falha', () => {
+      this.presentToast('user:del-falha');
     });
 
     this.events.subscribe('user:update', () => {
       this.presentToast('user:update');
     });
 
-    this.events.subscribe('user:update-faill', () => {
-      this.presentToast('user:update-faill');
+    this.events.subscribe('user:update-falha', () => {
+      this.presentToast('user:update-falha');
+    });
+
+    this.events.subscribe('user:senha-falha', () => {
+      this.presentToast('user:senha-falha');
     });
   }
 
   async presentToast(opcao: string) {
     switch (opcao) {
-      case 'user:login-faill':
+      case 'user:login-falha':
         this.toast = await this.toastController.create({
           message: 'Usuário e/ou senha invalidos.',
           duration: 2000
@@ -136,7 +140,7 @@ export class AppComponent implements OnInit {
         });
         this.toast.present();
         break;
-      case 'user:del-faill':
+      case 'user:del-falha':
         this.toast = await this.toastController.create({
           message: 'Senha incorreta.',
           duration: 2000
@@ -150,9 +154,16 @@ export class AppComponent implements OnInit {
         });
         this.toast.present();
         break;
-      case 'user:update-faill':
+      case 'user:update-falha':
         this.toast = await this.toastController.create({
           message: 'Falhou tente novamente.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
+      case 'user:senha-falha':
+        this.toast = await this.toastController.create({
+          message: 'Senhas diferentes.',
           duration: 2000
         });
         this.toast.present();
