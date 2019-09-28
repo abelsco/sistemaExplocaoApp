@@ -41,7 +41,7 @@ export class SchedulePage implements OnInit {
         case 'situaSilo':
           if (valor > 85) {
             return 'Crítica'
-          } else if (valor <= 85 && valor > 60) {
+          } else if (valor <= 85 && valor > 40) {
             return 'Alerta'
           }
           else
@@ -67,6 +67,17 @@ export class SchedulePage implements OnInit {
           else
             return 'Nivel Gás Seguro'
 
+        case 'situConcePo':
+          if (valor >= 10 && valor < 25) {
+            return 'Alerta: 10% do Limite Inferior de Inflamabilidade atingido'
+          } else if (valor >= 25 && valor < 80) {
+            return 'Alerta: 25% do Limite Inferior de Inflamabilidade atingido'
+          } else if (valor >= 80) {
+            return 'Crítico: Nivel de Concentração de Poeira muito próximo do limite'
+          }
+          else
+            return 'Nivel Concentração de Poeira Seguro'
+
         default:
           break;
       }
@@ -85,11 +96,11 @@ export class SchedulePage implements OnInit {
     this.atualLeitura = construtorLeitura();
     this.atualSilo = construtorSilo();
     this.color = function (value: number): string {
-      if (value < 20) {
+      if (value < 40) {
         return "#5ee432"; // green
       } else if (value < 40) {
         return "#fffa50"; // yellow
-      } else if (value < 85) {
+      } else if (value < 70) {
         return "#f7aa38"; // orange
       } else {
         return "#ef4655"; // red
@@ -100,17 +111,22 @@ export class SchedulePage implements OnInit {
   ngOnInit() {
     this.atualLeitura = construtorLeitura();
     this.user.getSilo().then(atual => {
-      this.atualSilo = atual;
+      if (atual != undefined) {
+        this.atualSilo = atual;
+      }
+      else {
+        this.atualSilo = construtorSilo();
+      }
       try {
         this.loop = setInterval(() => {
-          this.updateAmb(atual);
+          this.updateAmb();
         }, 2000);
       } catch (error) {
         console.log('Error ' + error);
       }
     });
   }
-  
+
   async segmentChanged() {
     await this.slider.slideTo(this.segment);
   }
@@ -123,30 +139,33 @@ export class SchedulePage implements OnInit {
     clearInterval(this.loop);
   }
 
-  async updateAmb(atual: Silo) {
+  async updateAmb() {
     this.user.isLoggedIn().then(logado => {
       if (logado) {
-        try {
-          this.user.getAmbi(atual);
-          this.user.getLeitura().then(data => {
-            // Lembrar de classificar melhor Aqui            
-            if (data.codLeitura) {
-              this.atualLeitura = data;
-              this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
-              this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
-              this.classificacao.situConceGas = this.classificacao.gera(this.atualLeitura.situConceGas, 'situConceGas');
+        this.user.getSilo().then(atual => {
+          this.atualSilo = atual;
+          try {
+            this.user.getAmbi(atual);
+            this.user.getLeitura().then(data => {
+              // Lembrar de classificar melhor Aqui            
+              if (data.codLeitura) {
+                this.atualLeitura = data;
+                this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+                this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+                this.classificacao.situConceGas = this.classificacao.gera(this.atualLeitura.situConceGas, 'situConceGas');
 
-            } else {
-              this.atualLeitura = construtorLeitura();
-              this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
-              this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
-              this.classificacao.situConceGas = this.classificacao.gera(this.atualLeitura.situConceGas, 'situConceGas');
-            }
-          });
+              } else {
+                this.atualLeitura = construtorLeitura();
+                this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
+                this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+                this.classificacao.situConceGas = this.classificacao.gera(this.atualLeitura.situConceGas, 'situConceGas');
+              }
+            });
 
-        } catch (error) {
-          console.log("updateAmb:" + error);
-        }
+          } catch (error) {
+            console.log("updateAmb:" + error);
+          }
+        });
       }
       else {
         this.user.zeraLeitura().then(data => {

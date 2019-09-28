@@ -38,19 +38,19 @@
       </ion-text>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Número de Série</ion-label>
+        <ion-label position="stacked" color="primary">Código de Série</ion-label>
         <ion-input [(ngModel)]="signup.codSerie" name="codSerie" type="text" #codSerie="ngModel" required>
         </ion-input>
       </ion-item>
       <ion-text color="danger">
         <p [hidden]="codSerie.valid || submitted == false" class="ion-padding-start">
-          Endereço do Silo é obrigatório
+          Código de Série é obrigatório
         </p>
       </ion-text>
 
       <ion-item>
         <ion-label position="stacked" color="primary">Tipo de material</ion-label>
-        <ion-select interface="action-sheet" [(ngModel)]="signup.tipoGrao" name="tipoGrao" #tipoGrao="ngModel" required>
+        <ion-select interface="action-sheet" [(ngModel)]="signup.tipoGrao" name="tipoGrao" #tipoGrao="ngModel" required cancelText="Cancelar">
           <ion-select-option value="Açúcar em pó" selected>Açúcar em pó</ion-select-option>
           <ion-select-option value="Alho desidratado">Alho desidratado</ion-select-option>
           <ion-select-option value="Arroz">Arroz</ion-select-option>
