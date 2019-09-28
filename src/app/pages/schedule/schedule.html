@@ -16,15 +16,22 @@
 <ion-content>
   <ion-slides #slides (ionSlideDidChange)="slideChanged()">
     <ion-slide class="slide">
-        <ion-col>
+      <ion-col>
+        <div class="ion-padding-top div-situaSilo">
+          <ion-title class="ion-text-center">Silo</ion-title>
+          <h3>Silo: {{atualSilo.nomeSilo}}</h3>
+          <h3>Grão ensilado: {{atualSilo.tipoGrao}}</h3>
+        </div>
+        <div class="ion-padding-top div-situaSilo">
+          <ion-title class="ion-text-center">Leitura</ion-title>
           <h3>Temperatura: {{atualLeitura.temperatura}} ºC</h3>
           <h3>Umidade: {{atualLeitura.umidade}} %</h3>
           <h3>Pressão: {{atualLeitura.pressao}} kg/m²</h3>
           <h3>Concentração de Pó: {{atualLeitura.concePo}} g/m³</h3>
-          <h3>Fonte de ignição: {{atualLeitura.fonteIg}} J</h3>
+          <h3>Gás Sulfídrico: {{atualLeitura.conceGas}} vol</h3>
           <h3>Oxigênio: {{atualLeitura.conceOxi}} %</h3>
-        </ion-col>
-
+        </div>
+      </ion-col>
     </ion-slide>
 
     <ion-slide>
@@ -37,55 +44,61 @@
             [animationDuration]="gauge.animationDuration" [color]="color">
           </mwl-gauge>
         </div>
-          <ion-col class="ion-float-left col-detalhe">
-            <div class="div-detalhe">
-              <p>Situação Temperatura: </p>
+        <ion-col class="ion-float-left col-detalhe">
+          <div class="div-detalhe">
+            <p>Situação Temperatura: </p>
+            <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+              [value]="this.atualLeitura.situTemperatura" [animated]="gauge.animated"
+              [animationDuration]="gauge.animationDuration">
+            </mwl-gauge>
+          </div>
+          <div class="div-detalhe">
+            <p>Situação Umidade: </p>
+            <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+              [value]="this.atualLeitura.situUmidade" [animated]="gauge.animated"
+              [animationDuration]="gauge.animationDuration">
+            </mwl-gauge>
+          </div>
+          <div class="div-detalhe">
+            <p>Situação Pressão: </p>
+            <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+              [value]="this.atualLeitura.situPressao" [animated]="gauge.animated"
+              [animationDuration]="gauge.animationDuration">
+            </mwl-gauge>
+          </div>
+        </ion-col>
+        <ion-col class="ion-float-left col-detalhe">
+          <div class="div-detalhe">
+            <p>Situação Poeira: </p>
+            <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+              [value]="this.atualLeitura.situConcePo" [animated]="gauge.animated"
+              [animationDuration]="gauge.animationDuration">
+            </mwl-gauge>
+          </div>
+          <div class="div-detalhe">
+            <p>Situação Oxigênio:</p>
+            <p>{{classificacao.situConceOxi}}</p>
+            <div>
               <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
-                [value]="this.atualLeitura.situTemperatura" [animated]="gauge.animated"
+                [value]="this.atualLeitura.conceOxi" [animated]="gauge.animated"
                 [animationDuration]="gauge.animationDuration">
               </mwl-gauge>
             </div>
-            <div class="div-detalhe">
-              <p>Situação Umidade: </p>
-              <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
-                [value]="this.atualLeitura.situUmidade" [animated]="gauge.animated"
-                [animationDuration]="gauge.animationDuration">
-              </mwl-gauge>
-            </div>
-            <div class="div-detalhe">
-              <p>Situação Pressão: </p>
-              <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
-                [value]="this.atualLeitura.situPressao" [animated]="gauge.animated"
-                [animationDuration]="gauge.animationDuration">
-              </mwl-gauge>
-            </div>
-          </ion-col>
-          <ion-col class="ion-float-left col-detalhe">
-            <div class="div-detalhe">
-              <p>Situação Poeira: </p>
-              <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
-                [value]="this.atualLeitura.situConcePo" [animated]="gauge.animated"
-                [animationDuration]="gauge.animationDuration">
-              </mwl-gauge>
-            </div>
-            <div class="div-detalhe">
-              <p>Situação Oxigênio:</p>
-              <p>{{classificacao.situConceOxi}}</p>
-              <div>
-                <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
-                  [value]="this.atualLeitura.conceOxi" [animated]="gauge.animated"
-                  [animationDuration]="gauge.animationDuration">
-                </mwl-gauge>
-              </div>
-            </div>
-            <div class="div-detalhe">
-              <p>Situação Energia Ignição: </p>
+          </div>
+          <div class="div-detalhe">
+            <!-- <p>Situação Energia Ignição: </p>
               <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
                 [value]="this.atualLeitura.situFonteIg" [animated]="gauge.animated"
                 [animationDuration]="gauge.animationDuration">
-              </mwl-gauge>
-            </div>
-          </ion-col>
+              </mwl-gauge> -->
+            <p>Situação Gás H2S: </p>
+            <p>{{classificacao.situConceGas}}</p>
+            <mwl-gauge [max]="gauge.max" [dialStartAngle]="gauge.dialStartAngle" [dialEndAngle]="gauge.dialEndAngle"
+              [value]="this.atualLeitura.situConceGas" [animated]="gauge.animated"
+              [animationDuration]="gauge.animationDuration">
+            </mwl-gauge>
+          </div>
+        </ion-col>
       </ion-grid>
     </ion-slide>
   </ion-slides>

@@ -16,6 +16,7 @@ export class UserData {
   private cliente: Cliente;
   private silo: Silo;
   private leitura: Leitura;
+  Minute: number = Date.now();
   constructor(
     public events: Events,
     private storage: Storage,
@@ -53,7 +54,12 @@ export class UserData {
       case 'tipoGrao':
         return this.dbData.postTipoGrao(dados).subscribe((resposta) => {
           if (resposta.status == 'sucesso') {
-            this.events.publish('user:update');
+            this.getSilo().then(atual => {
+              atual.tipoGrao = dados.tipoGrao;              
+              this.setSilo(atual);
+              this.events.publish('user:update');
+
+            });
           } else {
             this.events.publish('user:update-falha');
           }
@@ -148,6 +154,7 @@ export class UserData {
     // Deslogar no banco 
     await this.storage.remove('cliente');
     await this.storage.remove('silo');
+    await this.storage.remove('data');
     return this.events.publish('user:logout');
   }
 
@@ -161,6 +168,10 @@ export class UserData {
 
   async setLeitura(leitura: Leitura): Promise<any> {
     await this.storage.set('leitura', leitura);
+  }
+
+  async setTimer(data: Date): Promise<any> {
+    await this.storage.set('data', data);
   }
 
   async getCliente(): Promise<Cliente> {
@@ -178,6 +189,11 @@ export class UserData {
     return value;
   }
 
+  async getTimer(): Promise<Date> {
+    const value = await this.storage.get('data');
+    return value;
+  }
+
   async isLoggedIn(): Promise<boolean> {
     const value = await this.storage.get(this.HAS_LOGGED_IN);
     return value === true;
@@ -191,18 +207,20 @@ export class UserData {
   getAmbi(atual: Silo) {
     return this.dbData.getAmbi(atual).subscribe(data => {
       if (data.codLeitura) {
+        atual.tipoGrao = data.tipoGrao;
+        this.setSilo(atual);
         this.setSituacao(atual, data);
       }
     });
   }
 
-  private setSituacao(atual: Silo, resposta: Leitura) {
+  private setSituacao(atual: Silo, resposta: any) {
     switch (atual.tipoGrao) {
       case "Açúcar em pó":
         this.leitura.pressao = 7.7;
         this.leitura.temperatura = 370;
         this.leitura.conceOxi = 21;
-        this.leitura.fonteIg = 0.03;
+        // this.leitura.fonteIg = 0.03;
         this.leitura.umidade = 100;
         this.leitura.concePo = 45;
         break;
@@ -211,7 +229,7 @@ export class UserData {
         this.leitura.pressao = 4;
         this.leitura.temperatura = 360;
         this.leitura.conceOxi = 21;
-        this.leitura.fonteIg = 0.24;
+        // this.leitura.fonteIg = 0.24;
         this.leitura.umidade = 100;
         this.leitura.concePo = 10;
         break;
@@ -220,7 +238,7 @@ export class UserData {
         this.leitura.pressao = 3.3;
         this.leitura.temperatura = 510;
         this.leitura.conceOxi = 21;
-        this.leitura.fonteIg = 0.1;
+        // this.leitura.fonteIg = 0.1;
         this.leitura.umidade = 100;
         this.leitura.concePo = 85;
         break;
@@ -229,7 +247,7 @@ export class UserData {
         this.leitura.pressao = 4.3;
         this.leitura.temperatura = 490;
         this.leitura.conceOxi = 12;
-        this.leitura.fonteIg = 0.08;
+        // this.leitura.fonteIg = 0.08;
         this.leitura.umidade = 100;
         this.leitura.concePo = 45;
         break;
@@ -238,7 +256,7 @@ export class UserData {
         this.leitura.pressao = 7.7;
         this.leitura.temperatura = 450;
         this.leitura.conceOxi = 17;
-        this.leitura.fonteIg = 0.05;
+        // this.leitura.fonteIg = 0.05;
         this.leitura.umidade = 100;
         this.leitura.concePo = 55;
         break;
@@ -247,7 +265,7 @@ export class UserData {
         this.leitura.pressao = 6.9;
         this.leitura.temperatura = 540;
         this.leitura.conceOxi = 12;
-        this.leitura.fonteIg = 0.06;
+        // this.leitura.fonteIg = 0.06;
         this.leitura.umidade = 100;
         this.leitura.concePo = 40;
         break;
@@ -256,7 +274,7 @@ export class UserData {
         this.leitura.pressao = 6.6;
         this.leitura.temperatura = 550;
         this.leitura.conceOxi = 15;
-        this.leitura.fonteIg = 0.1;
+        // this.leitura.fonteIg = 0.1;
         this.leitura.umidade = 100;
         this.leitura.concePo = 60;
         break;
@@ -265,7 +283,7 @@ export class UserData {
         this.leitura.pressao = 5;
         this.leitura.temperatura = 500;
         this.leitura.conceOxi = 12;
-        this.leitura.fonteIg = 0.06;
+        // this.leitura.fonteIg = 0.06;
         this.leitura.umidade = 100;
         this.leitura.concePo = 0.5;
         break;
@@ -274,7 +292,7 @@ export class UserData {
         this.leitura.pressao = 7;
         this.leitura.temperatura = 440;
         this.leitura.conceOxi = 15;
-        this.leitura.fonteIg = 0.06;
+        // this.leitura.fonteIg = 0.06;
         this.leitura.umidade = 100;
         this.leitura.concePo = 50;
         break;
@@ -283,7 +301,7 @@ export class UserData {
         this.leitura.pressao = 9.2;
         this.leitura.temperatura = 430;
         this.leitura.conceOxi = 13;
-        this.leitura.fonteIg = 0.035;
+        // this.leitura.fonteIg = 0.035;
         this.leitura.umidade = 100;
         this.leitura.concePo = 35;
         break;
@@ -292,7 +310,7 @@ export class UserData {
         this.leitura.pressao = 8.2;
         this.leitura.temperatura = 470;
         this.leitura.conceOxi = 13;
-        this.leitura.fonteIg = 0.035;
+        // this.leitura.fonteIg = 0.035;
         this.leitura.umidade = 100;
         this.leitura.concePo = 75;
         break;
@@ -301,7 +319,7 @@ export class UserData {
         this.leitura.pressao = 7;
         this.leitura.temperatura = 430;
         this.leitura.conceOxi = 12;
-        this.leitura.fonteIg = 0.025;
+        // this.leitura.fonteIg = 0.025;
         this.leitura.umidade = 100;
         this.leitura.concePo = 45;
         break;
@@ -310,7 +328,7 @@ export class UserData {
         this.leitura.pressao = 8;
         this.leitura.temperatura = 400;
         this.leitura.conceOxi = 13;
-        this.leitura.fonteIg = 0.04;
+        // this.leitura.fonteIg = 0.04;
         this.leitura.umidade = 100;
         this.leitura.concePo = 55;
         break;
@@ -319,7 +337,7 @@ export class UserData {
         this.leitura.pressao = 8.7;
         this.leitura.temperatura = 410;
         this.leitura.conceOxi = 17;
-        this.leitura.fonteIg = 0.04;
+        // this.leitura.fonteIg = 0.04;
         this.leitura.umidade = 100;
         this.leitura.concePo = 40;
         break;
@@ -328,7 +346,7 @@ export class UserData {
         this.leitura.pressao = 10.2;
         this.leitura.temperatura = 390;
         this.leitura.conceOxi = 11;
-        this.leitura.fonteIg = 0.03;
+        // this.leitura.fonteIg = 0.03;
         this.leitura.umidade = 100;
         this.leitura.concePo = 40;
         break;
@@ -337,7 +355,7 @@ export class UserData {
         this.leitura.pressao = 8.9;
         this.leitura.temperatura = 450;
         this.leitura.conceOxi = 12;
-        this.leitura.fonteIg = 0.045;
+        // this.leitura.fonteIg = 0.045;
         this.leitura.umidade = 100;
         this.leitura.concePo = 45;
         break;
@@ -347,10 +365,12 @@ export class UserData {
     this.leitura.situTemperatura = (resposta.temperatura / this.leitura.temperatura) * 100;
     this.leitura.situConceOxi = (resposta.conceOxi / this.leitura.conceOxi) * 100;
     this.leitura.situPressao = (resposta.pressao / this.leitura.pressao) * 100;
-    this.leitura.situFonteIg = (resposta.fonteIg / this.leitura.fonteIg) * 100;
+    // this.leitura.situFonteIg = (resposta.fonteIg / this.leitura.fonteIg) * 100;
+    this.leitura.situConceGas = (resposta.conceGas / 4.3) * 100;
     this.leitura.situUmidade = (resposta.umidade / this.leitura.umidade) * 100;
     this.leitura.situConcePo = (resposta.concePo / this.leitura.concePo) * 100;
-    this.leitura.situaSilo = (this.leitura.situConceOxi + this.leitura.situConcePo + this.leitura.situFonteIg + this.leitura.situPressao + this.leitura.situTemperatura + this.leitura.situUmidade) / 6;
+    // this.leitura.situaSilo = (this.leitura.situConceOxi + this.leitura.situConcePo + this.leitura.situFonteIg + this.leitura.situPressao + this.leitura.situTemperatura + this.leitura.situUmidade) / 6;
+    this.leitura.situaSilo = (this.leitura.situConceOxi + this.leitura.situConcePo + this.leitura.situConceGas + this.leitura.situPressao + this.leitura.situTemperatura + this.leitura.situUmidade) / 6;
 
     this.leitura.codSilo = atual.codSilo;
     this.leitura.codLeitura = resposta.codLeitura;
@@ -358,9 +378,31 @@ export class UserData {
     this.leitura.pressao = resposta.pressao;
     this.leitura.umidade = resposta.umidade;
     this.leitura.concePo = resposta.concePo;
-    this.leitura.fonteIg = resposta.fonteIg;
+    // this.leitura.fonteIg = resposta.fonteIg;
+    this.leitura.conceGas = resposta.conceGas;
     this.leitura.conceOxi = resposta.conceOxi;
+    if (this.leitura.situaSilo >= 80) {
+      this.getTimer().then((timer) => {
+        if (timer != undefined) {
+          if ((new Date(resposta.dataLeitura).getMinutes() - 1) >= (new Date(timer).getMinutes())) {
+            this.leitura.dataLeitura = resposta.dataLeitura;
+            this.setTimer(resposta.dataLeitura);
+            this.events.publish('alerta:leitura-critica');
+          }
+        } else {
+          this.leitura.dataLeitura = resposta.dataLeitura;
+          this.setTimer(resposta.dataLeitura);
+          this.events.publish('alerta:leitura-critica');
+        }
+      });
+    }
     this.setLeitura(this.leitura);
+
+
+    // let segundos = Math.floor((+new Date() - +new Date(this.Minute)) / 1000);
+    // console.log(Math.floor((+new Date() - +new Date(this.Minute)) / 1000));
+    // if (segundos % 60 == 0)
   }
+
 
 }

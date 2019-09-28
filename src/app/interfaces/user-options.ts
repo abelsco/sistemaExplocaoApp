@@ -26,8 +26,8 @@ export function construtorSilo() {
     codSilo: 0,
     codCli: 0,
     codSerie: '',
-    nomeSilo: '',
-    tipoGrao: '',
+    nomeSilo: 'Você não está logado',
+    tipoGrao: 'Nenhum',
   };
   return silo;
 }
@@ -35,6 +35,7 @@ export function construtorSilo() {
 export interface Leitura {
   codLeitura: number;
   codSilo: number;
+  dataLeitura: Date;
   temperatura: number;
   situTemperatura: number;
   umidade: number;
@@ -45,14 +46,15 @@ export interface Leitura {
   situConcePo: number;
   conceOxi: number;
   situConceOxi: number;
-  fonteIg: number;
-  situFonteIg: number;
+  conceGas: number;
+  situConceGas: number;
   situaSilo: number;
 }
 export function construtorLeitura() {
   let leitura: Leitura = {
     codLeitura: 0,
     codSilo: 0,
+    dataLeitura: null,
     temperatura: 0,
     situTemperatura: 0,
     umidade: 0,
@@ -63,8 +65,8 @@ export function construtorLeitura() {
     situConcePo: 0,
     conceOxi: 0,
     situConceOxi: 0,
-    fonteIg: 0,
-    situFonteIg: 0,
+    conceGas: 0,
+    situConceGas: 0,
     situaSilo: 0,
   };
   return leitura;
@@ -89,7 +91,7 @@ temperatura
 umidade
 pressao
 concePo
-fonteIg
+conceGas
 conceOxi
 situaSilo
 

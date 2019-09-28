@@ -1,8 +1,8 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, IonList, LoadingController, ModalController, ToastController, IonSlides } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController, IonSlides } from '@ionic/angular';
 import { UserData } from '../../providers/user-data';
-import { Silo, Leitura, construtorLeitura } from './../../interfaces/user-options';
+import { Silo, Leitura, construtorLeitura, construtorSilo } from './../../interfaces/user-options';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class SchedulePage implements OnInit {
     situPressao: '',
     situConcePo: '',
     situConceOxi: '',
-    situFonteIg: '',
+    situConceGas: '',
     situaSilo: '',
     gera: function (valor: number, tipo: string): string {
       switch (tipo) {
@@ -56,6 +56,17 @@ export class SchedulePage implements OnInit {
           else
             return 'Nivel Seguro'
 
+        case 'situConceGas':
+          if (valor >= 10 && valor < 25) {
+            return 'Alerta: 10% do Limite Inferior de Inflamabilidade atingido'
+          } else if (valor >= 25 && valor < 80) {
+            return 'Alerta: 25% do Limite Inferior de Inflamabilidade atingido'
+          } else if (valor >= 80) {
+            return 'Crítico: Nivel de Gás muito próximo do limite'
+          }
+          else
+            return 'Nivel Gás Seguro'
+
         default:
           break;
       }
@@ -72,12 +83,13 @@ export class SchedulePage implements OnInit {
     private user: UserData,
   ) {
     this.atualLeitura = construtorLeitura();
+    this.atualSilo = construtorSilo();
     this.color = function (value: number): string {
       if (value < 20) {
         return "#5ee432"; // green
       } else if (value < 40) {
         return "#fffa50"; // yellow
-      } else if (value < 60) {
+      } else if (value < 85) {
         return "#f7aa38"; // orange
       } else {
         return "#ef4655"; // red
@@ -88,6 +100,7 @@ export class SchedulePage implements OnInit {
   ngOnInit() {
     this.atualLeitura = construtorLeitura();
     this.user.getSilo().then(atual => {
+      this.atualSilo = atual;
       try {
         this.loop = setInterval(() => {
           this.updateAmb(atual);
@@ -97,7 +110,7 @@ export class SchedulePage implements OnInit {
       }
     });
   }
-
+  
   async segmentChanged() {
     await this.slider.slideTo(this.segment);
   }
@@ -121,11 +134,13 @@ export class SchedulePage implements OnInit {
               this.atualLeitura = data;
               this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
               this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+              this.classificacao.situConceGas = this.classificacao.gera(this.atualLeitura.situConceGas, 'situConceGas');
 
             } else {
               this.atualLeitura = construtorLeitura();
               this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
               this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situConceOxi');
+              this.classificacao.situConceGas = this.classificacao.gera(this.atualLeitura.situConceGas, 'situConceGas');
             }
           });
 
@@ -135,9 +150,11 @@ export class SchedulePage implements OnInit {
       }
       else {
         this.user.zeraLeitura().then(data => {
+          this.atualSilo = construtorSilo();
           this.atualLeitura = data;
           this.classificacao.situaSilo = this.classificacao.gera(this.atualLeitura.situaSilo, 'situaSilo');
           this.classificacao.situConceOxi = this.classificacao.gera(this.atualLeitura.conceOxi, 'situaSilo');
+          this.classificacao.situConceGas = this.classificacao.gera(this.atualLeitura.situConceGas, 'situConceGas');
         });
       }
     });
