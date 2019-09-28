@@ -1,3 +1,4 @@
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, LOCALE_ID } from '@angular/core';
@@ -14,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SQLitePorter } from '@ionic-native/sqlite-porter/ngx';
 import { SQLite } from '@ionic-native/sqlite/ngx';
+import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification/ngx';
 
 registerLocaleData(localePt);
 @NgModule({
@@ -33,6 +35,8 @@ registerLocaleData(localePt);
     InAppBrowser,
     SplashScreen,
     BackgroundMode,
+    LocalNotifications,    
+    PhonegapLocalNotification,    
     StatusBar,
     SQLite,
     SQLitePorter

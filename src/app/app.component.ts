@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { Events, MenuController, Platform, ToastController } from '@ionic/angular';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -9,6 +9,8 @@ import { Storage } from '@ionic/storage';
 
 import { UserData } from './providers/user-data';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { PhonegapLocalNotification } from '@ionic-native/phonegap-local-notification/ngx';
+
 
 @Component({
   selector: 'app-root',
@@ -53,6 +55,8 @@ export class AppComponent implements OnInit {
     private storage: Storage,
     private toastController: ToastController,
     private userData: UserData,
+    private localNotifications: LocalNotifications,
+    private webNotifications: PhonegapLocalNotification,
   ) {
     this.initializeApp();
     this.backgroundMode.enable();
@@ -65,10 +69,24 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // this.statusBar.styleBlackTranslucent();
-      // this.statusBar.overlaysWebView(true);
-      this.statusBar.backgroundColorByHexString("#1a3225");
-      this.splashScreen.hide();
+      if (this.platform.is('hybrid')) {
+        // this.statusBar.styleBlackTranslucent();
+        // this.statusBar.overlaysWebView(true);
+        this.statusBar.backgroundColorByHexString("#1a3225");
+        this.localNotifications.requestPermission().then(() => {
+          this.localNotifications.setDefaults({
+            led: { color: '#FF00FF', on: 500, off: 500 },
+            vibrate: true,
+            icon: 'icon',
+            foreground: true,
+            wakeup: true,
+            // trigger: {at: new Date(new Date().getTime() + 1000*60)},
+          });
+
+        });
+
+        this.splashScreen.hide();
+      }
     });
   }
 
@@ -122,6 +140,10 @@ export class AppComponent implements OnInit {
     this.events.subscribe('user:senha-falha', () => {
       this.presentToast('user:senha-falha');
     });
+
+    this.events.subscribe('alerta:leitura-critica', () => {
+      this.presentToast('alerta:leitura-critica');
+    });
   }
 
   async presentToast(opcao: string) {
@@ -167,6 +189,33 @@ export class AppComponent implements OnInit {
           duration: 2000
         });
         this.toast.present();
+        break;
+      case 'alerta:leitura-critica':
+        if (this.platform.is('hybrid')) {
+          if (this.localNotifications.hasPermission()) {
+            this.localNotifications.schedule({
+              id: 0,
+              title: 'Cuidado',
+              text: 'O silo pode estar em perigo',
+            });
+          }
+        } else {
+          this.webNotifications.requestPermission().then(
+            (permission) => {
+              if (permission === 'granted') {
+
+                // Create the notification
+                this.webNotifications.create('Cuidado', {
+                  // tag: 'message1',
+                  body: 'O silo pode estar em perigo',
+                  icon: 'icon'
+                });
+
+              }
+            }
+          );
+
+        }
         break;
       case 'user:delete':
         this.toast = await this.toastController.create({
