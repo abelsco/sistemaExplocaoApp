@@ -7,20 +7,31 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="outer-content">
+<ion-content>
   <div *ngIf="cliente" class="ion-padding-top ion-text-center">
     <img src="assets/img/icon-vec.png" alt="avatar">
     <h2>Bem vindo(a) {{cliente.usuario}}</h2>
-    <h2>Tipo de grão armazenado: {{cliente.tipoGrao}}</h2>
+    <h2>Grão: {{cliente.tipoGrao}}</h2>
     <ion-list inset>
-      <ion-item (click)="changeTipoGrao()">Mudar Tipo Grão</ion-item>
-      <ion-item (click)="changeNomeSilo()">Mudar Nome do Silo</ion-item>
-      <ion-item (click)="logout()">Logout</ion-item>
+      <ion-item (click)="changeTipoGrao()">
+        <ion-label>Mudar Tipo Grão</ion-label>
+      </ion-item>
+      <ion-item (click)="changeNomeSilo()">
+        <ion-label>Mudar Nome do Silo</ion-label>
+      </ion-item>
+      <ion-item (click)="logout()">
+        <ion-label>Logout</ion-label>
+      </ion-item>
     </ion-list>
-    <ion-label>Definição conta</ion-label>
+
     <ion-list inset>
-      <ion-item (click)="changeSenha()">Mudar Senha</ion-item>
-      <ion-item class="deleta" (click)="support()">Deletar conta</ion-item>
+      <ion-label>Definição conta</ion-label>
+      <ion-item (click)="changeSenha()">
+        <ion-label>Mudar Senha</ion-label>
+      </ion-item>
+      <ion-item (click)="support()">
+        <ion-label class="deleta">Deletar conta</ion-label>
+      </ion-item>
     </ion-list>
   </div>
 </ion-content>

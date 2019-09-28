@@ -267,7 +267,7 @@ export class AccountPage implements AfterViewInit {
         }, {
           text: 'Sim',
           handler: (dado: any) => {
-            console.log(dado);
+            // console.log(dado);
 
             this.cliente.senha = dado.senha;
             this.userData.suporte(this.cliente, 'deletar');
