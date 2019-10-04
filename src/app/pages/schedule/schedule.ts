@@ -13,7 +13,7 @@ import { Silo, Leitura, construtorLeitura, construtorSilo } from './../../interf
 
 export class SchedulePage implements OnInit {
   // Gets a reference to the list element
-  @ViewChild('slides') slider: IonSlides;
+  @ViewChild('slides', {static: true}) slider: IonSlides;
   color: (value: number) => string;
 
   segment = 0;

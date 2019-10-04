@@ -174,6 +174,10 @@ export class UserData {
     await this.storage.set('data', data);
   }
 
+  async setChart(chart: any): Promise<any> {
+    await this.storage.set('chart', chart);
+  }
+
   async getCliente(): Promise<Cliente> {
     const value = await this.storage.get('cliente');
     return value;
@@ -189,8 +193,13 @@ export class UserData {
     return value;
   }
 
-  async getTimer(): Promise<Date> {
+  private async getTimer(): Promise<Date> {
     const value = await this.storage.get('data');
+    return value;
+  }
+
+  async getChart(): Promise<any> {
+    const value = await this.storage.get('chart');
     return value;
   }
 
@@ -212,6 +221,12 @@ export class UserData {
         this.setSituacao(atual, data);
       }
     });
+  }
+
+  getRelatorio(codSilo: number, opcao: string){
+    return this.dbData.getRelatorio(codSilo, opcao).subscribe(data => {
+      this.setChart(data);      
+    })
   }
 
   private setSituacao(atual: Silo, resposta: any) {
@@ -365,7 +380,7 @@ export class UserData {
     this.leitura.situTemperatura = (resposta.temperatura / this.leitura.temperatura) * 100;
     this.leitura.situConceOxi = (resposta.conceOxi / this.leitura.conceOxi) * 100;
     this.leitura.situPressao = (resposta.pressao / this.leitura.pressao) * 100;
-    // this.leitura.situFonteIg = (resposta.fonteIg / this.leitura.fonteIg) * 100;
+    // this.leitura.situFonte Ig = (resposta.fonteIg / this.leitura.fonteIg) * 100;
     this.leitura.situConceGas = (resposta.conceGas / 4.3) * 100;
     this.leitura.situUmidade = (resposta.umidade / this.leitura.umidade) * 100;
     this.leitura.situConcePo = (resposta.concePo / this.leitura.concePo) * 100;

@@ -50,6 +50,7 @@ export interface Leitura {
   situConceGas: number;
   situaSilo: number;
 }
+
 export function construtorLeitura() {
   let leitura: Leitura = {
     codLeitura: 0,
@@ -71,6 +72,16 @@ export function construtorLeitura() {
   };
   return leitura;
 }
+
+// export interface Relatorio {
+//   label: number;
+//   temperatura: number;
+//   umidade: number;
+//   pressao: number;
+//   concePo: number;
+//   conceOxi: number;
+//   conceGas: number;
+// }
 
 
 /* -Cliente-

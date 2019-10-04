@@ -17,7 +17,7 @@ export class DbDataService {
 
   constructor(
     private httpClient: HttpClient,
-  ) {  }
+  ) { }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -79,6 +79,13 @@ export class DbDataService {
 
   getAmbi(atual: Silo) {
     return this.httpClient.get<any>(this.url_storage + 'ambiente?codSilo=' + atual.codSilo).pipe(
+      retry(2),
+      catchError(this.handleError)
+    );
+  }
+
+  getRelatorio(codSilo: number, opcao: string) {
+    return this.httpClient.get<any>(this.url_storage + 'relatorio?codSilo=' + codSilo + '&opcao=' + opcao).pipe(
       retry(2),
       catchError(this.handleError)
     );
