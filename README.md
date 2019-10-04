@@ -4,7 +4,7 @@ Esta interface foi desenvolvida utilizando como base o template [conference](htt
 
 
 ## Table of Contents
-- [Getting Started](#getting-started)
+- [Iniciando](#iniciando)
 - [App Preview](#app-preview)
 - [Deploying](#deploying)
   - [Progressive Web App](#progressive-web-app)
@@ -12,7 +12,7 @@ Esta interface foi desenvolvida utilizando como base o template [conference](htt
   - [iOS](#ios)
 
 
-## Getting Started
+## Iniciando
 
 * [Download the installer](https://nodejs.org/) for Node.js 6 or greater.
 * Install the ionic CLI globally: `npm install -g ionic`
@@ -30,12 +30,16 @@ All app preview screenshots were taken by running `ionic serve --lab` on a retin
 
 - [Schedule Page](https://github.com/ionic-team/ionic-conference-app/blob/master/src/app/pages/schedule/schedule.html)
 
-  <img src="resources/screenshots/SchedulePage.png" alt="Schedule">
+  <img src="resources/screenshots/Screenshot_20190928_170135.png" alt="Schedule">
 
 
 - [About Page](https://github.com/ionic-team/ionic-conference-app/blob/master/src/app/pages/about/about.html)
 
-  <img src="resources/screenshots/AboutPage.png" alt="Schedule">
+  <img src="resources/screenshots/Screenshot_20190928_170232.png" alt="Schedule">
+
+- [About Page](https://github.com/ionic-team/ionic-conference-app/blob/master/src/app/pages/about/about.html)
+
+  <img src="resources/screenshots/Screenshot_20190928_170308.png" alt="Schedule">
 
 
 - To see more images of the app, check out the [screenshots directory](https://github.com/ionic-team/ionic-conference-app/tree/master/resources/screenshots)!
