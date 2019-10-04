@@ -28,11 +28,15 @@ const routes: Routes = [
     path: 'tutorial',
     loadChildren: './pages/tutorial/tutorial.module#TutorialModule',
     canLoad: [CheckTutorial]
-  }
+  },
+  {
+    path: 'report',
+    loadChildren: './pages/report/report.module#ReportPageModule'
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

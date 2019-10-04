@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Relatório</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Relatório</ion-label>
+    <ion-select (ionChange)="onChange()" [(ngModel)]="form.opcao" name="opcao" #opcao="ngModel" required
+      cancelText="Cancelar">
+      <ion-select-option value="Dia">Diario</ion-select-option>
+      <ion-select-option value="Mes">Mensal</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Opção</ion-label>
+    <ion-select (ionChange)="getChart()" [(ngModel)]="form.tipo" name="tipo" #tipo="ngModel" cancelText="Cancelar">
+      <ion-select-option value="">Selecione uma Opção</ion-select-option>
+      <ion-select-option value="concePo">Poeira</ion-select-option>
+      <ion-select-option value="conceGas">Gás</ion-select-option>
+      <ion-select-option value="conceOxi">Oxigênio</ion-select-option>
+      <ion-select-option value="temperatura">Temperatura</ion-select-option>
+      <ion-select-option value="umidade">Umidade</ion-select-option>
+      <ion-select-option value="pressao">Pressão</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div style="display: block;">
+    <canvas baseChart width="400" height="400"
+      [datasets]="lineChartData"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType"
+      [plugins]="lineChartPlugins">
+    </canvas>
+  </div>
+</ion-content>
