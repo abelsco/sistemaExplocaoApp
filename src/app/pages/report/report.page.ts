@@ -33,7 +33,8 @@ export class ReportPage implements OnInit {
     opcao: string,
     tipo: string,
   }
-  atualChart: any;
+  atualChartData: any;
+  atualChartLabel: any;
 
   constructor(private userData: UserData) { }
 
@@ -51,42 +52,56 @@ export class ReportPage implements OnInit {
 
   onChange() {
     this.userData.getRelatorio(this.atualSilo.codSilo, this.form.opcao);
+    // this.getChart();
+    this.form.tipo = '';
   }
 
   getChart() {
     this.userData.getChart().then((chart) => {
       switch (this.form.tipo) {
+        case 'leituras':
+          this.atualChartData = chart.body[0].leituras;
+          this.lineChartLabels = chart.body[0].label.data[0];
+          break;
         case 'concePo':
-          this.atualChart = chart.body[0].concePo;
+          this.atualChartData = chart.body[0].concePo;
+          this.lineChartLabels = chart.body[0].label.data[0];
           break;
         case 'conceGas':
-          this.atualChart = chart.body[0].conceGas;
+          this.atualChartData = chart.body[0].conceGas;
+          this.lineChartLabels = chart.body[0].label.data[0];
           break;
         case 'conceOxi':
-          this.atualChart = chart.body[0].conceOxi;
+          this.atualChartData = chart.body[0].conceOxi;
+          this.lineChartLabels = chart.body[0].label.data[0];
           break;
         case 'temperatura':
-          this.atualChart = chart.body[0].temperatura;
+          this.atualChartData = chart.body[0].temperatura;
+          this.lineChartLabels = chart.body[0].label.data[0];
           break;
         case 'umidade':
-          this.atualChart = chart.body[0].umidade;
+          this.atualChartData = chart.body[0].umidade;
+          this.lineChartLabels = chart.body[0].label.data[0];
           break;
         case 'pressao':
-          this.atualChart = chart.body[0].pressao;
+          this.atualChartData = chart.body[0].pressao;
+          this.lineChartLabels = chart.body[0].label.data[0];
           break;
 
         default:
+          this.atualChartData = undefined;
+          this.lineChartLabels = [];
           break;
       }
-      if (this.atualChart != undefined) {
-
-
-        console.log(this.atualChart);
+      if (this.atualChartData != undefined) {
         this.lineChartData = [
-          { data: this.atualChart.data[0], label: this.atualChart.label }
+          {
+            data: this.atualChartData.data[0],
+            label: this.atualChartData.label
+          }
         ];
-
-        this.lineChartLabels = this.atualChart.data[1];
+      } else {
+        this.lineChartData = [];
       }
 
     });
