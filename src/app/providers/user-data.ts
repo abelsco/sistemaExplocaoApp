@@ -34,20 +34,20 @@ export class UserData {
     return value;
   }
 
-  hasFavorite(sessionName: string): boolean {
-    return (this._favorites.indexOf(sessionName) > -1);
-  }
+  // hasFavorite(sessionName: string): boolean {
+  //   return (this._favorites.indexOf(sessionName) > -1);
+  // }
 
-  addFavorite(sessionName: string): void {
-    this._favorites.push(sessionName);
-  }
+  // addFavorite(sessionName: string): void {
+  //   this._favorites.push(sessionName);
+  // }
 
-  removeFavorite(sessionName: string): void {
-    const index = this._favorites.indexOf(sessionName);
-    if (index > -1) {
-      this._favorites.splice(index, 1);
-    }
-  }
+  // removeFavorite(sessionName: string): void {
+  //   const index = this._favorites.indexOf(sessionName);
+  //   if (index > -1) {
+  //     this._favorites.splice(index, 1);
+  //   }
+  // }
 
   suporte(dados: any, opcao: string) {
     switch (opcao) {
@@ -55,7 +55,7 @@ export class UserData {
         return this.dbData.postTipoGrao(dados).subscribe((resposta) => {
           if (resposta.status == 'sucesso') {
             this.getSilo().then(atual => {
-              atual.tipoGrao = dados.tipoGrao;              
+              atual.tipoGrao = dados.tipoGrao;
               this.setSilo(atual);
               this.events.publish('user:update');
 
@@ -127,25 +127,39 @@ export class UserData {
   }
 
   signup(dados: any) {
-    dados.senha = sha512_256(dados.senha);
-    dados.codSerie = sha512_256(dados.codSerie);
-    return this.dbData.postCliente(dados).subscribe(resposta => {
-      this.storage.set(this.HAS_LOGGED_IN, true);
-      this.silo = {
-        codSilo: resposta.codSilo,
-        codCli: resposta.codCli,
-        codSerie: resposta.codSerie,
-        nomeSilo: resposta.nomeSilo,
-        tipoGrao: resposta.tipoGrao,
-      };
-      this.cliente = {
-        codCli: resposta.codCli,
-        usuario: dados.usuario,
-        senha: dados.senha,
-      };
-      this.setSilo(this.silo);
-      this.setCliente(this.cliente);
-      return this.events.publish('user:signup');
+    let senha = dados.senha;
+    let codSerie = dados.codSerie;
+    dados.senha = sha512_256(senha);
+    dados.codSerie = sha512_256(codSerie);
+    return this.dbData.postCliente(dados).subscribe(resposta => {    
+
+      if (resposta.falha == 'usuario') {
+        dados.senha = senha;
+        dados.usuario = '';
+        dados.codSerie = codSerie;
+        return this.events.publish('user:falha-usuario');
+      } else if (resposta.falha == 'silo') {
+        dados.senha = senha;
+        dados.codSerie = '';
+        return this.events.publish('user:falha-silo');
+      } else {
+        this.storage.set(this.HAS_LOGGED_IN, true);
+        this.silo = {
+          codSilo: resposta.codSilo,
+          codCli: resposta.codCli,
+          codSerie: resposta.codSerie,
+          nomeSilo: resposta.nomeSilo,
+          tipoGrao: resposta.tipoGrao,
+        };
+        this.cliente = {
+          codCli: resposta.codCli,
+          usuario: dados.usuario,
+          senha: dados.senha,
+        };
+        this.setSilo(this.silo);
+        this.setCliente(this.cliente);
+        return this.events.publish('user:signup');
+      }
     });
   }
 
@@ -155,6 +169,7 @@ export class UserData {
     await this.storage.remove('cliente');
     await this.storage.remove('silo');
     await this.storage.remove('data');
+    await this.storage.remove('chart');
     return this.events.publish('user:logout');
   }
 
@@ -223,9 +238,9 @@ export class UserData {
     });
   }
 
-  getRelatorio(codSilo: number, opcao: string){
+  getRelatorio(codSilo: number, opcao: string) {
     return this.dbData.getRelatorio(codSilo, opcao).subscribe(data => {
-      this.setChart(data);      
+      this.setChart(data);
     })
   }
 
@@ -384,8 +399,28 @@ export class UserData {
     this.leitura.situConceGas = (resposta.conceGas / 4.3) * 100;
     this.leitura.situUmidade = (resposta.umidade / this.leitura.umidade) * 100;
     this.leitura.situConcePo = (resposta.concePo / this.leitura.concePo) * 100;
+
+    if (this.leitura.situTemperatura > 100)
+      this.leitura.situTemperatura = 100;
+
+    if (this.leitura.situConceOxi > 100)
+      this.leitura.situConceOxi = 100;
+
+    if (this.leitura.situPressao > 100)
+      this.leitura.situPressao = 100;
+
+    if (this.leitura.situConceGas > 100)
+      this.leitura.situConceGas = 100;
+
+    if (this.leitura.situUmidade > 100)
+      this.leitura.situUmidade = 100;
+
+    if (this.leitura.situConcePo > 100)
+      this.leitura.situConcePo = 100;
+
     // this.leitura.situaSilo = (this.leitura.situConceOxi + this.leitura.situConcePo + this.leitura.situFonteIg + this.leitura.situPressao + this.leitura.situTemperatura + this.leitura.situUmidade) / 6;
-    this.leitura.situaSilo = (this.leitura.situConceOxi + this.leitura.situConcePo + this.leitura.situConceGas + this.leitura.situPressao + this.leitura.situTemperatura + this.leitura.situUmidade) / 6;
+    // this.leitura.situaSilo = (this.leitura.situConceOxi + this.leitura.situConcePo + this.leitura.situConceGas + this.leitura.situPressao + this.leitura.situTemperatura + this.leitura.situUmidade) / 6;
+    this.leitura.situaSilo = (this.leitura.situConceOxi + this.leitura.situConcePo + this.leitura.situConceGas + this.leitura.situPressao + this.leitura.situUmidade) / 5;
 
     this.leitura.codSilo = atual.codSilo;
     this.leitura.codLeitura = resposta.codLeitura;
