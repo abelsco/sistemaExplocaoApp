@@ -109,7 +109,7 @@ export class SchedulePage implements OnInit {
   }
 
   ngOnInit() {
-    this.atualLeitura = construtorLeitura();
+    this.updateAmb();
     this.user.getSilo().then(atual => {
       if (atual != undefined) {
         this.atualSilo = atual;
@@ -120,7 +120,7 @@ export class SchedulePage implements OnInit {
       try {
         this.loop = setInterval(() => {
           this.updateAmb();
-        }, 2000);
+        }, 10000);
       } catch (error) {
         console.log('Error ' + error);
       }
