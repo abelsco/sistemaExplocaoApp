@@ -25,16 +25,6 @@ export class AppComponent implements OnInit {
       url: '/app/tabs/schedule',
       icon: 'calendar'
     },
-    /* {
-      title: 'Speakers',
-      url: '/app/tabs/speakers',
-      icon: 'contacts'
-    },
-    {
-      title: 'Map',
-      url: '/app/tabs/map',
-      icon: 'map'
-    }, */
     {
       title: 'Sobre',
       url: '/app/tabs/about',
@@ -110,6 +100,7 @@ export class AppComponent implements OnInit {
 
     this.events.subscribe('user:signup', () => {
       this.updateLoggedInStatus(true);
+      return this.router.navigateByUrl('/app/tabs/schedule');
     });
 
     this.events.subscribe('user:logout', () => {
@@ -143,6 +134,14 @@ export class AppComponent implements OnInit {
 
     this.events.subscribe('alerta:leitura-critica', () => {
       this.presentToast('alerta:leitura-critica');
+    });
+
+    this.events.subscribe('user:falha-usuario', () => {
+      this.presentToast('user:falha-usuario');
+    });
+
+    this.events.subscribe('user:falha-silo', () => {
+      this.presentToast('user:falha-silo');
     });
   }
 
@@ -190,6 +189,20 @@ export class AppComponent implements OnInit {
         });
         this.toast.present();
         break;
+      case 'user:falha-usuario':
+        this.toast = await this.toastController.create({
+          message: 'Usuário existente.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
+      case 'user:falha-silo':
+        this.toast = await this.toastController.create({
+          message: 'CodSerie existente.',
+          duration: 2000
+        });
+        this.toast.present();
+        break;
       case 'alerta:leitura-critica':
         if (this.platform.is('hybrid')) {
           if (this.localNotifications.hasPermission()) {
@@ -216,30 +229,6 @@ export class AppComponent implements OnInit {
           );
 
         }
-        break;
-      case 'user:delete':
-        this.toast = await this.toastController.create({
-          header: 'Toast header',
-          message: 'Click to Close',
-          position: 'bottom',
-          color: 'tertiary',
-          buttons: [
-            {
-              side: 'start',
-              text: 'Favorite',
-              handler: () => {
-                console.log('Favorite clicked');
-              }
-            }, {
-              text: 'Done',
-              role: 'cancel',
-              handler: () => {
-                console.log('Cancel clicked');
-              }
-            }
-          ]
-        });
-        this.toast.present();
         break;
 
       default:

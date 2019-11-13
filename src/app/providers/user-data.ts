@@ -10,7 +10,6 @@ import { sha512_256 } from 'js-sha512';
   providedIn: 'root'
 })
 export class UserData {
-  _favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
   private cliente: Cliente;
@@ -33,21 +32,6 @@ export class UserData {
     const value = await this.getLeitura();
     return value;
   }
-
-  // hasFavorite(sessionName: string): boolean {
-  //   return (this._favorites.indexOf(sessionName) > -1);
-  // }
-
-  // addFavorite(sessionName: string): void {
-  //   this._favorites.push(sessionName);
-  // }
-
-  // removeFavorite(sessionName: string): void {
-  //   const index = this._favorites.indexOf(sessionName);
-  //   if (index > -1) {
-  //     this._favorites.splice(index, 1);
-  //   }
-  // }
 
   suporte(dados: any, opcao: string) {
     switch (opcao) {
