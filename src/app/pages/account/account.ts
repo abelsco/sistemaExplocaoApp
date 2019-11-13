@@ -248,7 +248,7 @@ export class AccountPage implements AfterViewInit {
     this.router.navigateByUrl('/app/tabs/schedule');
   }
 
-  support() {
+  delete() {
     this.deletarConta();
   }
 
