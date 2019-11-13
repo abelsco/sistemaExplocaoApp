@@ -36,7 +36,7 @@ export class DbDataService {
   };
 
   postCliente(dados: any) {
-    return this.httpClient.post<Silo>(this.url_storage + 'cliente/', dados).pipe(
+    return this.httpClient.post<any>(this.url_storage + 'cliente/', dados).pipe(
       retry(2),
       catchError(this.handleError)
     );
@@ -50,14 +50,14 @@ export class DbDataService {
   }
 
   postNomeSilo(dados: any) {
-    return this.httpClient.post<any>(this.url_storage + 'cliente/nomesilo/', dados).pipe(
+    return this.httpClient.post<any>(this.url_storage + 'silo/nomesilo/', dados).pipe(
       retry(2),
       catchError(this.handleError)
     );
   }
 
   postTipoGrao(dados: any) {
-    return this.httpClient.post<any>(this.url_storage + 'cliente/tipograo/', dados).pipe(
+    return this.httpClient.post<any>(this.url_storage + 'silo/tipograo/', dados).pipe(
       retry(2),
       catchError(this.handleError)
     );
