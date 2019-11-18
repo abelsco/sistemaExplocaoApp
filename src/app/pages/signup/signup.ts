@@ -28,8 +28,15 @@ export class SignupPage {
     this.submitted = true;
     // console.log(sha512(this.signup.senha));
 
-    if (form.valid) {
-      this.userData.signup(this.signup);
+    if (form.valid) {      
+      let dados = {
+        usuario: this.signup.usuario,
+        tipoGrao: this.signup.tipoGrao,
+        senha: this.signup.senha,
+        nomeSilo: this.signup.nomeSilo,
+        codSerie: this.signup.codSerie,
+      }
+      this.userData.signup(dados);
       // this.router.navigateByUrl('/app/tabs/schedule');
     }
   }

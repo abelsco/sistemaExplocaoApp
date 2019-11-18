@@ -4,11 +4,6 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Sobre</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="presentPopover($event)">
-        <ion-icon slot="icon-only" name="more"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -42,4 +37,51 @@
       O projeto tem como objetivo o monitoramento das condições internas de silos de cereais.
     </p>
   </div>
+  <!-- Item Dividers in a List -->
+  <ion-list>
+
+    <ion-item-divider color="primary">
+      <ion-label>
+        Dados Cliente
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <p><b>Usuário</b><br />Identificação do cliente, dado único e não alterável.</p>
+    </ion-item>
+    <ion-item>
+      <p><b>Senha</b><br />Senha do cliente, dado necessário para o controle de acesso, alterável.</p>
+    </ion-item>
+
+    <ion-item-divider color="primary">
+      <ion-label>
+        Dados Silo
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <p><b>Nome do Silo</b><br />Identificação do silo, dado alterável.</p>
+    </ion-item>
+    <ion-item>
+      <p><b>Código de Série</b><br />Texto que identifica o Arduíno localizado no silo, dado único e não alterável.</p>
+    </ion-item>
+    <ion-item>
+      <p><b>Tipo de material</b><br />Tipo do grão armazenado no silo necessário para realizar as classificações, dado
+        alterável.</p>
+    </ion-item>
+
+    <ion-item-divider color="primary">
+      <ion-label>
+        Descrição do Relatório
+      </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <p><b>Relatório</b><br />Opção de relatório mensal e diário sobre o sistema. Está função está disponível apenas para clientes devidamente logados.</p>
+    </ion-item>
+    <ion-item>
+      <p><b>Opção</b><br />Seleciona a característica que se deseja visualizar no gráfico.</p>
+    </ion-item>
+  </ion-list>
+
 </ion-content>

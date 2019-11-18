@@ -10,7 +10,7 @@ import { retry, catchError } from 'rxjs/operators';
 })
 
 export class DbDataService {
-  // private hostStorage: string = '192.168.16.254';
+  // private hostStorage: string = '10.92.3.245';
   private hostStorage: string = '192.168.16.4';
   // private hostStorage: string = '127.0.0.1';
   private url_storage: string = 'http://' + this.hostStorage + ':5001/api/';

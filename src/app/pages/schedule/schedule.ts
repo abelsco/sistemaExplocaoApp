@@ -39,9 +39,9 @@ export class SchedulePage implements OnInit {
     gera: function (valor: number, tipo: string): string {
       switch (tipo) {
         case 'situaSilo':
-          if (valor > 85) {
+          if (valor >= 70) {
             return 'Crítica'
-          } else if (valor <= 85 && valor > 40) {
+          } else if (valor < 70 && valor > 40) {
             return 'Alerta'
           }
           else
@@ -98,7 +98,7 @@ export class SchedulePage implements OnInit {
     this.color = function (value: number): string {
       if (value < 40) {
         return "#5ee432"; // green
-      } else if (value < 40) {
+      } else if (value < 55) {
         return "#fffa50"; // yellow
       } else if (value < 70) {
         return "#f7aa38"; // orange

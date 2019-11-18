@@ -111,20 +111,13 @@ export class UserData {
   }
 
   signup(dados: any) {
-    let senha = dados.senha;
-    let codSerie = dados.codSerie;
-    dados.senha = sha512_256(senha);
-    dados.codSerie = sha512_256(codSerie);
-    return this.dbData.postCliente(dados).subscribe(resposta => {    
+    dados.senha = sha512_256(dados.senha);
+    dados.codSerie = sha512_256(dados.codSerie);
+    return this.dbData.postCliente(dados).subscribe(resposta => {      
 
       if (resposta.falha == 'usuario') {
-        dados.senha = senha;
-        dados.usuario = '';
-        dados.codSerie = codSerie;
         return this.events.publish('user:falha-usuario');
       } else if (resposta.falha == 'silo') {
-        dados.senha = senha;
-        dados.codSerie = '';
         return this.events.publish('user:falha-silo');
       } else {
         this.storage.set(this.HAS_LOGGED_IN, true);
