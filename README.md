@@ -1,6 +1,6 @@
 # Sistema de Monitoramento de Silos (APP)
 
-Esta interface foi desenvolvida utilizando como base o template [conference](https://github.com/ionic-team/ionic-conference-app) utilizando o Ionic Framework e Angular.
+Esta interface foi desenvolvida utilizando como base o template [conference](https://github.com/ionic-team/ionic-conference-app) utilizando o Ionic Framework e Angular 8.
 
 
 ## Tópicos
