@@ -65,18 +65,18 @@ export class SchedulePage implements OnInit {
             return 'Crítico: Nivel de Gás muito próximo do limite'
           }
           else
-            return 'Nivel Gás Seguro'
+            return 'Nivel de Gás Seguro'
 
         case 'situConcePo':
           if (valor >= 10 && valor < 25) {
-            return 'Alerta: 10% do Limite Inferior de Inflamabilidade atingido'
+            return 'Alerta: 10% da Concentração atingida'
           } else if (valor >= 25 && valor < 80) {
-            return 'Alerta: 25% do Limite Inferior de Inflamabilidade atingido'
+            return 'Alerta: 25% da Concentração atingida'
           } else if (valor >= 80) {
             return 'Crítico: Nivel de Concentração de Poeira muito próximo do limite'
           }
           else
-            return 'Nivel Concentração de Poeira Seguro'
+            return 'Nivel de Concentração de Poeira Seguro'
 
         default:
           break;

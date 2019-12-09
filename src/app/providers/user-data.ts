@@ -113,7 +113,7 @@ export class UserData {
   signup(dados: any) {
     dados.senha = sha512_256(dados.senha);
     dados.codSerie = sha512_256(dados.codSerie);
-    return this.dbData.postCliente(dados).subscribe(resposta => {      
+    return this.dbData.postCliente(dados).subscribe(resposta => {
 
       if (resposta.falha == 'usuario') {
         return this.events.publish('user:falha-usuario');
@@ -374,7 +374,8 @@ export class UserData {
     this.leitura.situPressao = (resposta.pressao / this.leitura.pressao) * 100;
     // this.leitura.situFonte Ig = (resposta.fonteIg / this.leitura.fonteIg) * 100;
     this.leitura.situConceGas = (resposta.conceGas / 4.3) * 100;
-    this.leitura.situUmidade = (resposta.umidade / this.leitura.umidade) * 100;
+    // this.leitura.situUmidade = (resposta.umidade / this.leitura.umidade) * 100;
+    this.leitura.situUmidade = (this.leitura.umidade / resposta.umidade) * 100;
     this.leitura.situConcePo = (resposta.concePo / this.leitura.concePo) * 100;
 
     if (this.leitura.situTemperatura > 100)
